@@ -1,0 +1,36 @@
+name: 'Bug'
+description: '버그가 생겼어요'
+title: '🐞 [BUG] - <title>'
+labels: 버그
+body:
+  - type: textarea
+    attributes:
+      label: Description
+      description: |
+        [설명] 버그에 관한 설명을 적어주세요.
+      placeholder: |
+        예) 버튼을 클릭했을 떄 전체 client component가 rendering되는 문제가 있습니다.
+
+  - type : textarea
+    attributes:
+      label: To Reproduce
+      description: |
+        [재현 방법] 버그를 재현하기 위한 환경, 트리거를 적어주세요.
+      placeholder: |
+        예) vercel 배포 환경에서 버튼 클릭 시
+
+  - type: textarea
+    attributes:
+      label: Expected Behavior
+      description: |
+        [기대 동작] 버그가 발생하지 않았을 때의 동작을 적어주세요.
+      placeholder: |
+        예) 클릭한 버튼만 rerendering 되어야 합니다.
+
+  - type: textarea
+    attributes:
+      label: Additional
+      description: |
+        [추가사항] 별도로 알려줘야 할 사항이나 추가사항을 작성해주세요.
+      placeholder: |
+        예) component를 감싸는 div를 없앴더니 생기지 않았어요.
