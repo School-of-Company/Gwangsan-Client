@@ -9,4 +9,4 @@
   "plugins": ["prettier-plugin-tailwindcss"],
   "tailwindFunctions": ["cn"],
   "tailwindConfig": "./tailwind.config.ts"
-} 
+}

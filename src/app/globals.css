@@ -1,8 +1,8 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @layer base {
   * {
-    @apply box-border p-0 m-0;
+    @apply m-0 box-border p-0;
   }
 
   html,
@@ -19,7 +19,7 @@
   }
 
   button {
-    @apply cursor-pointer bg-transparent border-0;
+    @apply cursor-pointer border-0 bg-transparent;
   }
 
   table {
@@ -95,8 +95,6 @@
     --foreground: theme('colors.gray.900');
   }
 }
-
-
 
 @layer base {
   * {

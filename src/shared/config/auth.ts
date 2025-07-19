@@ -8,4 +8,4 @@ export const authConfig: AuthConfig = {
   signInPage: '/signin',
   protectedPages: [''],
   publicPages: ['/signin', '/'],
-} as const; 
+} as const;

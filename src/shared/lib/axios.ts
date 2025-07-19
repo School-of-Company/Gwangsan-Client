@@ -1,4 +1,8 @@
-import axios, { AxiosError, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, {
+  AxiosError,
+  InternalAxiosRequestConfig,
+  AxiosResponse,
+} from 'axios';
 import { authConfig } from '../config/auth';
 
 export const baseURL = process.env.NEXT_PUBLIC_API_URL;
@@ -29,7 +33,9 @@ instance.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
-    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+    const originalRequest = error.config as InternalAxiosRequestConfig & {
+      _retry?: boolean;
+    };
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
@@ -40,9 +46,12 @@ instance.interceptors.response.use(
           throw new Error('No refresh token');
         }
 
-        const response = await instance.post<{ token: string }>('/auth/refresh', {
-          refreshToken,
-        });
+        const response = await instance.post<{ token: string }>(
+          '/auth/refresh',
+          {
+            refreshToken,
+          },
+        );
 
         const { token } = response.data;
         localStorage.setItem('token', token);
@@ -59,4 +68,4 @@ instance.interceptors.response.use(
 
     return Promise.reject(error);
   },
-); 
+);

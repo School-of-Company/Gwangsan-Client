@@ -1,4 +1,4 @@
-name:  Frontend CI
+name: Frontend CI
 
 on:
   pull_request:
@@ -33,9 +33,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Lint
         run: npm run lint
-        
+
       - name: Build
         run: npm run build

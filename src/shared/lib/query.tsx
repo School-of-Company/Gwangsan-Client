@@ -23,4 +23,4 @@ export function QueryProvider({ children }: QueryProviderProps) {
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
-} 
+}
