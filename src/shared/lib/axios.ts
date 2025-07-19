@@ -4,6 +4,8 @@ import axios, {
   AxiosResponse,
 } from 'axios';
 import { authConfig } from '../config/auth';
+import { storage } from './storage';
+import { AUTH_TOKEN_KEY, AUTH_REFRESH_TOKEN_KEY } from '@/entities/user';
 
 export const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -17,9 +19,11 @@ export const instance = axios.create({
 
 instance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (typeof window !== 'undefined') {
+      const token = storage.getItem(AUTH_TOKEN_KEY);
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
     return config;
   },
@@ -33,6 +37,10 @@ instance.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
+    if (typeof window === 'undefined') {
+      return Promise.reject(error);
+    }
+
     const originalRequest = error.config as InternalAxiosRequestConfig & {
       _retry?: boolean;
     };
@@ -41,7 +49,7 @@ instance.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = localStorage.getItem('refreshToken');
+        const refreshToken = storage.getItem(AUTH_REFRESH_TOKEN_KEY);
         if (!refreshToken) {
           throw new Error('No refresh token');
         }
@@ -54,13 +62,13 @@ instance.interceptors.response.use(
         );
 
         const { token } = response.data;
-        localStorage.setItem('token', token);
+        storage.setItem(AUTH_TOKEN_KEY, token);
 
         originalRequest.headers.Authorization = `Bearer ${token}`;
         return instance(originalRequest);
       } catch (error) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
+        storage.removeItem(AUTH_TOKEN_KEY);
+        storage.removeItem(AUTH_REFRESH_TOKEN_KEY);
         window.location.href = authConfig.signInPage;
         return Promise.reject(error);
       }
