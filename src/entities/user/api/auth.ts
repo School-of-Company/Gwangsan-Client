@@ -14,4 +14,4 @@ export interface SignInResponse {
 export const signIn = async (data: SignInRequest): Promise<SignInResponse> => {
   const response = await instance.post<SignInResponse>('/admin/signin', data);
   return response.data;
-}; 
+};

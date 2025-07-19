@@ -15,4 +15,4 @@ export interface AuthState {
   user: User | null;
   token: UserToken | null;
   isAuthenticated: boolean;
-} 
+}

@@ -4,7 +4,13 @@ import axios, {
   AxiosResponse,
 } from 'axios';
 import { authConfig } from '../config/auth';
-import { AUTH_TOKEN_KEY, AUTH_REFRESH_TOKEN_KEY, getCookie, setCookie, clearTokens } from '@/entities/user';
+import {
+  AUTH_TOKEN_KEY,
+  AUTH_REFRESH_TOKEN_KEY,
+  getCookie,
+  setCookie,
+  clearTokens,
+} from '@/entities/user';
 
 export const baseURL = process.env.NEXT_PUBLIC_API_URL;
 

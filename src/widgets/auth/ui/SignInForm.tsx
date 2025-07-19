@@ -23,7 +23,7 @@ export const SignInForm = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    
+
     if (errors[name as keyof typeof errors]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
     }
@@ -49,16 +49,16 @@ export const SignInForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     setIsLoading(true);
 
     try {
       const response = await signIn(formData);
-      
+
       saveTokens(response.token);
-      
+
       toast.success('로그인에 성공했습니다.');
       router.push('/');
       router.refresh();
@@ -75,7 +75,7 @@ export const SignInForm = () => {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto border rounded-md">
+    <Card className="mx-auto w-full max-w-md rounded-md border">
       <CardHeader className="flex items-center justify-center">
         <h1 className="text-2xl font-bold">로그인</h1>
       </CardHeader>
@@ -115,15 +115,11 @@ export const SignInForm = () => {
               <p className="text-xs text-red-500">{errors.password}</p>
             )}
           </div>
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={isLoading}
-          >
+          <Button type="submit" className="w-full" disabled={isLoading}>
             로그인
           </Button>
         </form>
       </CardContent>
     </Card>
   );
-}; 
+};

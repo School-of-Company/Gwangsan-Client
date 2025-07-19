@@ -1,1 +1,1 @@
-export * from '@/shared/lib/cookies'; 
+export * from '@/shared/lib/cookies';
