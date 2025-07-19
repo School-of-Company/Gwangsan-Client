@@ -4,8 +4,7 @@ import axios, {
   AxiosResponse,
 } from 'axios';
 import { authConfig } from '../config/auth';
-import { storage } from './storage';
-import { AUTH_TOKEN_KEY, AUTH_REFRESH_TOKEN_KEY } from '@/entities/user';
+import { AUTH_TOKEN_KEY, AUTH_REFRESH_TOKEN_KEY, getCookie, setCookie, clearTokens } from '@/entities/user';
 
 export const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -20,9 +19,9 @@ export const instance = axios.create({
 instance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     if (typeof window !== 'undefined') {
-      const token = storage.getItem(AUTH_TOKEN_KEY);
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+      const accessToken = getCookie(AUTH_TOKEN_KEY);
+      if (accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
       }
     }
     return config;
@@ -49,26 +48,25 @@ instance.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = storage.getItem(AUTH_REFRESH_TOKEN_KEY);
+        const refreshToken = getCookie(AUTH_REFRESH_TOKEN_KEY);
         if (!refreshToken) {
           throw new Error('No refresh token');
         }
 
-        const response = await instance.post<{ token: string }>(
+        const response = await instance.post<{ accessToken: string }>(
           '/auth/refresh',
           {
             refreshToken,
           },
         );
 
-        const { token } = response.data;
-        storage.setItem(AUTH_TOKEN_KEY, token);
+        const { accessToken } = response.data;
+        setCookie(AUTH_TOKEN_KEY, accessToken, 604800); // 7일 후 만료
 
-        originalRequest.headers.Authorization = `Bearer ${token}`;
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return instance(originalRequest);
       } catch (error) {
-        storage.removeItem(AUTH_TOKEN_KEY);
-        storage.removeItem(AUTH_REFRESH_TOKEN_KEY);
+        clearTokens();
         window.location.href = authConfig.signInPage;
         return Promise.reject(error);
       }
