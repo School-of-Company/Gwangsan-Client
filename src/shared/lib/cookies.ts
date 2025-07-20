@@ -26,12 +26,6 @@ export const setCookie = (
     .join('; ');
 
   document.cookie = `${name}=${value}; ${optionsString}`;
-
-  console.log('Setting cookie:', {
-    name,
-    value: value.substring(0, 10) + '...',
-    fullCookie: `${name}=${value}; ${optionsString}`,
-  });
 };
 
 export const getCookie = (name: string): string | null => {
@@ -52,11 +46,6 @@ export const removeCookie = (name: string): void => {
 export const saveTokens = (token: UserToken): void => {
   setCookie(AUTH_TOKEN_KEY, token.accessToken, 604800);
   setCookie(AUTH_REFRESH_TOKEN_KEY, token.refreshToken, 604800);
-
-  console.log('Tokens saved, current cookies:', {
-    accessToken: getCookie(AUTH_TOKEN_KEY) ? 'present' : 'missing',
-    refreshToken: getCookie(AUTH_REFRESH_TOKEN_KEY) ? 'present' : 'missing',
-  });
 };
 
 export const getTokens = (): {

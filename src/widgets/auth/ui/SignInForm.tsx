@@ -1,88 +1,40 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
 import { Card, CardContent, CardHeader } from '@/shared/components/ui/card';
-import { toast } from 'sonner';
-import { SignInRequest, signIn, saveTokens } from '@/entities/user';
+import { useSignIn } from '@/features/auth';
 
 export const SignInForm = () => {
-  const router = useRouter();
-  const [formData, setFormData] = useState<SignInRequest>({
-    nickname: '',
-    password: '',
-  });
-  const [errors, setErrors] = useState({
-    nickname: '',
-    password: '',
-  });
-  const [isLoading, setIsLoading] = useState(false);
+  const { formData, errors, isLoading, canSubmit, updateField, handleSubmit } =
+    useSignIn();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const onSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      handleSubmit();
+    },
+    [handleSubmit],
+  );
 
-    if (errors[name as keyof typeof errors]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
-    }
-  };
-
-  const validateForm = (): boolean => {
-    const newErrors = { nickname: '', password: '' };
-    let isValid = true;
-
-    if (!formData.nickname.trim()) {
-      newErrors.nickname = '아이디를 입력해주세요';
-      isValid = false;
-    }
-
-    if (!formData.password) {
-      newErrors.password = '비밀번호를 입력해주세요';
-      isValid = false;
-    }
-
-    setErrors(newErrors);
-    return isValid;
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!validateForm()) return;
-
-    setIsLoading(true);
-
-    try {
-      const response = await signIn(formData);
-
-      saveTokens(response.token);
-
-      toast.success('로그인에 성공했습니다.');
-      router.push('/');
-      router.refresh();
-    } catch (error) {
-      toast.error('로그인에 실패했습니다.');
-      console.error('로그인 에러:', error);
-      setErrors({
-        nickname: '아이디 또는 비밀번호가 올바르지 않습니다',
-        password: '아이디 또는 비밀번호가 올바르지 않습니다',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      updateField(name as 'nickname' | 'password', value);
+    },
+    [updateField],
+  );
 
   return (
-    <Card className="mx-auto w-full max-w-md rounded-md border">
-      <CardHeader className="flex items-center justify-center">
+    <Card className="mx-auto w-full max-w-md">
+      <CardHeader className="text-center">
         <h1 className="text-2xl font-bold">로그인</h1>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={onSubmit} className="space-y-6" noValidate>
           <div className="space-y-2">
-            <label htmlFor="nickname" className="block text-sm">
+            <label htmlFor="nickname" className="block text-sm font-medium">
               아이디
             </label>
             <Input
@@ -93,13 +45,25 @@ export const SignInForm = () => {
               onChange={handleChange}
               placeholder="아이디를 입력하세요"
               required
+              aria-invalid={!!errors.nickname}
+              aria-describedby={errors.nickname ? 'nickname-error' : undefined}
+              className={
+                errors.nickname ? 'border-red-500 focus:border-red-500' : ''
+              }
             />
             {errors.nickname && (
-              <p className="text-xs text-red-500">{errors.nickname}</p>
+              <p
+                id="nickname-error"
+                className="text-xs text-red-500"
+                role="alert"
+              >
+                {errors.nickname}
+              </p>
             )}
           </div>
+
           <div className="space-y-2">
-            <label htmlFor="password" className="block text-sm">
+            <label htmlFor="password" className="block text-sm font-medium">
               비밀번호
             </label>
             <Input
@@ -108,15 +72,39 @@ export const SignInForm = () => {
               type="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="********"
+              placeholder="비밀번호를 입력하세요"
               required
+              aria-invalid={!!errors.password}
+              aria-describedby={errors.password ? 'password-error' : undefined}
+              className={
+                errors.password ? 'border-red-500 focus:border-red-500' : ''
+              }
             />
             {errors.password && (
-              <p className="text-xs text-red-500">{errors.password}</p>
+              <p
+                id="password-error"
+                className="text-xs text-red-500"
+                role="alert"
+              >
+                {errors.password}
+              </p>
             )}
           </div>
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            로그인
+
+          <Button
+            type="submit"
+            className="w-full"
+            variant="outline"
+            disabled={!canSubmit}
+          >
+            {isLoading ? (
+              <div className="flex items-center space-x-2">
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                <span>로그인 중...</span>
+              </div>
+            ) : (
+              '로그인'
+            )}
           </Button>
         </form>
       </CardContent>

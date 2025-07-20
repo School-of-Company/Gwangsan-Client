@@ -74,7 +74,7 @@ instance.interceptors.response.use(
         );
 
         const { accessToken } = response.data;
-        setCookie(AUTH_TOKEN_KEY, accessToken, 604800); // 7일 후 만료
+        setCookie(AUTH_TOKEN_KEY, accessToken, 604800);
 
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return instance(originalRequest);
