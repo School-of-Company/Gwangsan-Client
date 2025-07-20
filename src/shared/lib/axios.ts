@@ -50,7 +50,10 @@ instance.interceptors.response.use(
       _retry?: boolean;
     };
 
-    if (originalRequest.url?.includes('/admin/signin') && error.response?.status === 401) {
+    if (
+      originalRequest.url?.includes('/admin/signin') &&
+      error.response?.status === 401
+    ) {
       return Promise.reject(error);
     }
 
