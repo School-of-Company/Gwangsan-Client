@@ -8,12 +8,12 @@ export function middleware(request: NextRequest) {
 
   if (currentPath.startsWith('/api')) {
     requestHeaders.set('x-custom-header', 'api-request');
-    
+
     const accessToken = request.cookies.get('accessToken');
     if (accessToken) {
       requestHeaders.set('Authorization', `Bearer ${accessToken.value}`);
     }
-    
+
     return NextResponse.next({
       request: {
         headers: requestHeaders,
@@ -21,20 +21,22 @@ export function middleware(request: NextRequest) {
     });
   }
 
-  if (currentPath.startsWith('/_next') || 
-      currentPath.startsWith('/favicon') ||
-      currentPath.includes('.')) {
+  if (
+    currentPath.startsWith('/_next') ||
+    currentPath.startsWith('/favicon') ||
+    currentPath.includes('.')
+  ) {
     return NextResponse.next();
   }
 
   const hasAccessToken = request.cookies.has('accessToken');
 
-  const isProtectedPage = authConfig.protectedPages.some(
-    (path: string) => currentPath.startsWith(path)
+  const isProtectedPage = authConfig.protectedPages.some((path: string) =>
+    currentPath.startsWith(path),
   );
-  
+
   const isAuthPage = authConfig.publicPages.some(
-    (path: string) => path !== '/' && currentPath.startsWith(path)
+    (path: string) => path !== '/' && currentPath.startsWith(path),
   );
 
   if (!hasAccessToken && isProtectedPage) {
@@ -56,4 +58,4 @@ export const config = {
   matcher: [
     '/((?!api|_next/static|_next/image|favicon.ico|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.gif|.*\\.svg).*)',
   ],
-}; 
+};

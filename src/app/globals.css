@@ -1,8 +1,10 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
   * {
-    @apply box-border p-0 m-0;
+    @apply m-0 box-border p-0;
   }
 
   html,
@@ -11,7 +13,7 @@
   }
 
   body {
-    @apply flex min-h-screen flex-col bg-white text-black dark:bg-gray-900 dark:text-white;
+    @apply flex min-h-screen flex-col bg-white text-black;
   }
 
   a {
@@ -19,7 +21,7 @@
   }
 
   button {
-    @apply cursor-pointer bg-transparent border-0;
+    @apply cursor-pointer border-0 bg-transparent;
   }
 
   table {
@@ -34,18 +36,4 @@
 
 :root {
   --font-inter: var(--font-inter);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: theme('colors.gray.900');
-    --foreground: theme('colors.gray.100');
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --background: theme('colors.white');
-    --foreground: theme('colors.gray.900');
-  }
 }

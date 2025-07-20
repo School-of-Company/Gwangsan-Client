@@ -1,9 +1,9 @@
-const Signin = () => {
+import { SignInForm } from '@/widgets/auth';
+
+export default function SignInPage() {
   return (
-    <div>
-      <h1>SignInPage</h1>
+    <div className="flex min-h-screen items-center justify-center p-4">
+      <SignInForm />
     </div>
   );
-};
-
-export default Signin;
+}
