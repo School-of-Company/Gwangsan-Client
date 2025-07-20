@@ -1,4 +1,4 @@
-export const PLACES = [
+export const DONGS = [
   '동곡동',
   '도산동',
   '평동',
@@ -21,4 +21,4 @@ export const PLACES = [
   '삼도동',
 ] as const;
 
-export type Place = (typeof PLACES)[number];
+export type Dong = (typeof DONGS)[number];
