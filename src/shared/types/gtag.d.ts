@@ -9,10 +9,10 @@ declare global {
         event_label?: string;
         value?: number;
         [key: string]: any;
-      }
+      },
     ) => void;
     dataLayer: any[];
   }
 }
 
-export {}; 
+export {};
