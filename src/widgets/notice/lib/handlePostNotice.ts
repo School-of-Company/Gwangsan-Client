@@ -3,19 +3,17 @@ import { MemberRole } from '@/shared/const/role';
 import { NoticeSchema } from '../model/noticeSchema';
 import { postNotice } from '../api/postNotice';
 import { toast } from 'sonner';
-import { uploadImage } from '../api/uploadImage';
 
-export const handlePostNotice = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-
-  const formData = new FormData(e.currentTarget);
-  const imageFile = await uploadImage([formData.get('imageIds') as File]);
-
+export const handlePostNotice = async (formData: FormData) => {
+  const imageIdsRaw = formData.getAll('imageIds');
+  const imageIds = imageIdsRaw
+    .map((id) => Number(id))
+    .filter((id) => !isNaN(id));
   const value = {
     title: formData.get('title') as string,
     content: formData.get('content') as string,
     placeName: formData.get('placeName') as Place,
-    imageIds: imageFile,
+    imageIds,
     role: formData.get('role') as MemberRole,
   };
 
@@ -25,7 +23,6 @@ export const handlePostNotice = async (e: React.FormEvent<HTMLFormElement>) => {
     if (res) {
       if (res.status === 201) {
         toast.success('공지가 작성되었습니다');
-        e.currentTarget.reset();
       } else {
         toast.error(
           res.status === 403
@@ -36,9 +33,12 @@ export const handlePostNotice = async (e: React.FormEvent<HTMLFormElement>) => {
     }
   } else {
     const fieldErrors = result.error.flatten().fieldErrors;
-    toast.error(fieldErrors.content);
-    toast.error(fieldErrors.imageIds);
-    toast.error(fieldErrors.placeName);
-    toast.error(fieldErrors.title);
+    Object.values(fieldErrors).forEach((messages) => {
+      if (Array.isArray(messages)) {
+        messages.forEach((msg) => {
+          if (msg) toast.error(msg);
+        });
+      }
+    });
   }
 };

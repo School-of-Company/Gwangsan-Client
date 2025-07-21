@@ -13,13 +13,15 @@ import {
 import { Textarea } from '@/shared/components/ui/textarea';
 import { PLACES } from '@/shared/const/place';
 import { cn } from '@/shared/lib/utils';
-import { Upload } from 'lucide-react';
 import { handlePostNotice } from '../../lib/handlePostNotice';
 import { storage } from '@/shared/lib/storage';
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { uploadImage } from '../../api/uploadImage';
 
 export default function WriteNotice() {
   const roleRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [imageIds, setImageIds] = useState<number[]>([]);
 
   useEffect(() => {
     if (roleRef.current) {
@@ -27,11 +29,28 @@ export default function WriteNotice() {
     }
   }, []);
 
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.currentTarget.files) {
+      const files = Array.from(e.currentTarget.files);
+      const uploaded = await uploadImage(files);
+      setImageIds(uploaded);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    // imageIds를 formData에 추가
+    imageIds.forEach((id) => formData.append('imageIds', id.toString()));
+    await handlePostNotice(formData);
+    setImageIds([]);
+  };
+
   return (
     <div className={cn('w-full px-16')}>
       <h2 className={cn('text-titleMedium2')}>공지사항 작성</h2>
       <form
-        onSubmit={handlePostNotice}
+        onSubmit={handleSubmit}
         className={cn('mt-[28px] flex flex-col gap-6')}
       >
         <div>
@@ -84,14 +103,20 @@ export default function WriteNotice() {
           <label htmlFor="imageIds">첨부 이미지</label>
           <div className="mt-1 flex items-center space-x-2">
             <Input
+              ref={fileInputRef}
+              onChange={handleImageChange}
               type="file"
               id="imageIds"
               name="imageIds"
               accept="image/*"
               multiple
             />
-            <Button variant="outline" size="sm" type="button">
-              <Upload className="h-4 w-4" />
+            <Button
+              size="sm"
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              파일첨부
             </Button>
           </div>
         </div>
