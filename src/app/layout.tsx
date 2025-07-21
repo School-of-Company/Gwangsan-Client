@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={cn(`flex items-center antialiased`)}>
-        <div className={cn('w-full max-w-[600px]')}>
+        <div className={cn('h-full w-full max-w-[1400px] overflow-hidden')}>
           <Header />
           <QueryProvider>
             {children}
