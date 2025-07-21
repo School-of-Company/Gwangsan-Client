@@ -11,8 +11,8 @@ export const NoticeSchema = z.object({
     .string()
     .min(1, '내용을 입력해주세요.')
     .max(1000, '최대 1000자까지만 입력 가능합니다.'),
-  place: z.enum(PLACES).nullable(),
-  imageIds: z.number(),
+  placeName: z.enum(PLACES).nullable(),
+  imageIds: z.array(z.number().int().positive()),
   role: z.enum(MEMBER_ROLES),
 });
 
