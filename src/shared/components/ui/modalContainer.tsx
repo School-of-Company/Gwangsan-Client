@@ -4,7 +4,7 @@ import React from 'react';
 
 interface ModalContainerProps {
   children: React.ReactNode;
-  className: string;
+  className?: string;
 }
 
 export default function ModalContainer({
