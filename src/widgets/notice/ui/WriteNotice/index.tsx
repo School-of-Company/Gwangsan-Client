@@ -88,10 +88,14 @@ export default function WriteNotice() {
             <SelectTrigger>
               <SelectValue placeholder="본점을 선택해주세요" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className={cn('w-full bg-white')}>
               <SelectGroup id="placeName">
                 {PLACES.map((v) => (
-                  <SelectItem className={cn('bg-white')} value={v} key={v}>
+                  <SelectItem
+                    className={cn('w-full bg-white')}
+                    value={v}
+                    key={v}
+                  >
                     {v}
                   </SelectItem>
                 ))}
