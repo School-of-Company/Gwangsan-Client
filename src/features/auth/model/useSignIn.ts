@@ -15,6 +15,7 @@ import {
   getFieldSchema,
 } from '@/entities/user';
 import { debounce } from '@/shared/lib/debounce';
+import { storage } from '@/shared/lib/storage';
 
 export const useSignIn = () => {
   const router = useRouter();
@@ -52,6 +53,7 @@ export const useSignIn = () => {
     mutationFn: signIn,
     onSuccess: (response) => {
       saveTokens(response.token);
+      storage.setItem('role', response.role);
 
       Promise.all([
         queryClient.invalidateQueries({ queryKey: ['user'] }),
