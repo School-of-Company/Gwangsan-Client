@@ -1,7 +1,9 @@
 import { Place } from '@/shared/const/place';
 import { ImageType } from '@/shared/types/imageType';
 
-type REPORT_TYPE = 'FRAUD' | 'BAD_LANGUAGE' | 'MEMBER' | 'ETC';
+export type REPORT_TYPE = 'FRAUD' | 'BAD_LANGUAGE' | 'MEMBER' | 'ETC';
+
+export type ALERT_TYPE = 'REPORT' | 'SIGN_UP' | 'TRADE_COMPLETE';
 
 export interface Trade {
   nickname: string;
