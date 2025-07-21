@@ -14,7 +14,7 @@ export default function Header() {
     R.push('/');
   }, [R]);
 
-  if (pathname === '/signin') return;
+  if (pathname === '/signin' || pathname.includes('/detail')) return;
   return (
     <header>
       <Image
