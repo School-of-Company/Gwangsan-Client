@@ -1,7 +1,5 @@
+import { MainView } from '@/views/main';
+
 export default function Main() {
-  return (
-    <div>
-      <h1>Home</h1>
-    </div>
-  );
+  return <MainView />;
 }
