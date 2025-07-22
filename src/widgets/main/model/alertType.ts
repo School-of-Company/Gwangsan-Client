@@ -37,7 +37,7 @@ export interface SignUp {
 }
 
 export interface Reports {
-  reportId: number;
+  id: number;
   nickname: string;
   reportedMemberId: number;
   reportedMemberName: string;
@@ -50,5 +50,6 @@ export interface Reports {
 export interface Report {
   reportType: REPORT_TYPE;
   content: string;
+  reportId: number;
   images: ImageType[];
 }
