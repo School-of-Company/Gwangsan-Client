@@ -1,3 +1,68 @@
+'use client';
+
+import { GoNotice } from '@/entities/main';
+import { cn } from '@/shared/lib/utils';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/shared/components/ui/table';
+import { Badge } from '@/shared/components/ui/badge';
+import { MoreHorizontal } from 'lucide-react';
+import { useGetMembers } from '../../model/useGetMembers';
+import { MEMBER_STATUS_KOR } from '@/shared/types/memberType';
+
 export default function Member() {
-  return <div></div>;
+  const { data } = useGetMembers();
+  return (
+    <div className="w-full">
+      <h2 className={cn('mt-[96px] text-titleMedium2')}>회원목록</h2>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>회원</TableHead>
+            <TableHead>역할</TableHead>
+            <TableHead>상태</TableHead>
+            <TableHead>가입일</TableHead>
+            <TableHead />
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data &&
+            data.map((member, idx) => (
+              <TableRow key={idx}>
+                <TableCell className="whitespace-nowrap">
+                  <div className="flex flex-col">
+                    <span>
+                      {member.nickname} | <span>{member.name}</span>
+                    </span>
+                    <span className="text-muted-foreground text-sm">
+                      {member.phoneNumber}
+                    </span>
+                  </div>
+                </TableCell>
+                <TableCell>{member.role}</TableCell>
+                <TableCell>
+                  <Badge
+                    variant={
+                      member.status !== 'ACTIVE' ? 'destructive' : 'default'
+                    }
+                  >
+                    {MEMBER_STATUS_KOR[member.status]}
+                  </Badge>
+                </TableCell>
+                <TableCell>{member.joinedAt}</TableCell>
+                <TableCell className="text-right">
+                  <MoreHorizontal className="text-muted-foreground h-4 w-4 cursor-pointer" />
+                </TableCell>
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
+      <GoNotice />
+    </div>
+  );
 }
