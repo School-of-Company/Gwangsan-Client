@@ -22,6 +22,7 @@ import RoleModal from '@/entities/main/ui/RoleModal';
 export default function Member() {
   const { data } = useGetMembers();
   const [show, setShow] = useState(false);
+  const [selected, setSelected] = useState({ name: '', id: '' });
 
   return (
     <div className="w-full">
@@ -66,21 +67,27 @@ export default function Member() {
                   </TableCell>
                   <TableCell>{handleDate(member.joinedAt)}</TableCell>
                   <TableCell className="text-right">
-                    <Button onClick={() => setShow(true)} variant="outline">
+                    <Button
+                      onClick={() => {
+                        setSelected({ name: member.name, id: member.memberId });
+                        setShow(true);
+                      }}
+                      variant="outline"
+                    >
                       역할 변경
                     </Button>
                   </TableCell>
-                  <RoleModal
-                    setShow={setShow}
-                    userName={member.name}
-                    open={show}
-                  />
                 </TableRow>
               ))}
           </TableBody>
         </Table>
       </div>
-
+      <RoleModal
+        setShow={setShow}
+        id={selected.id}
+        name={selected.name}
+        open={show}
+      />
       <GoNotice />
     </div>
   );
