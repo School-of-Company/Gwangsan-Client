@@ -13,7 +13,7 @@ export default function GoNotice() {
   return (
     <div className={cn('w-full')}>
       <h2 className={cn('mt-[52px] text-titleMedium2')}>공지</h2>
-      <Button onClick={handleClick} variant="outline">
+      <Button className="mt-6 w-full" onClick={handleClick} variant="outline">
         공지작성하러 가기
       </Button>
     </div>
