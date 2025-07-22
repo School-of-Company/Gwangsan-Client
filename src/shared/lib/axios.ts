@@ -48,7 +48,16 @@ instance.interceptors.response.use(
 
     const originalRequest = error.config as InternalAxiosRequestConfig & {
       _retry?: boolean;
+      _retryCount?: number;
     };
+
+    // 재시도 횟수 제한: 2회
+    if (!originalRequest._retryCount) {
+      originalRequest._retryCount = 0;
+    }
+    if (originalRequest._retryCount >= 2) {
+      return Promise.reject(error);
+    }
 
     if (
       originalRequest.url?.includes('/admin/signin') &&
@@ -59,6 +68,7 @@ instance.interceptors.response.use(
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
+      originalRequest._retryCount += 1;
 
       try {
         const refreshToken = getCookie(AUTH_REFRESH_TOKEN_KEY);
