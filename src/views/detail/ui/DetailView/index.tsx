@@ -8,6 +8,7 @@ import { MemberRole } from '@/shared/const/role';
 import { ArrowLeft } from 'lucide-react';
 import { useCallback } from 'react';
 import { ImageSlider } from '@/entities/detail';
+import { handleDate } from '@/shared/lib/handleDate';
 
 export default function DetailView() {
   const { id } = useParams();
@@ -31,7 +32,7 @@ export default function DetailView() {
           <h1 className={cn('mb-4 text-titleLarge')}>{data?.title}</h1>
           <div className={cn('flex gap-[42px] text-body2 text-gray-600')}>
             <small>{handleRoleName(data?.role as MemberRole)}</small>
-            <small>{data?.createdAt.split('T')[0].replaceAll('-', '.')}</small>
+            <small>{handleDate(data?.createdAt)}</small>
           </div>
         </div>
         {data?.images && <ImageSlider images={data?.images} />}
