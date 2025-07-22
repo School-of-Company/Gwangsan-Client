@@ -1,13 +1,9 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import { Toaster } from 'sonner';
 import { QueryProvider } from '@/shared/lib/query';
 import './globals.css';
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-});
+import { cn } from '@/shared/lib/utils';
+import Header from '@/shared/components/ui/header';
 
 export const metadata: Metadata = {
   title: '',
@@ -21,11 +17,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body className={`${inter.variable} antialiased`}>
-        <QueryProvider>
-          {children}
-          <Toaster position="top-center" expand={true} richColors />
-        </QueryProvider>
+      <body className={cn(`flex items-center antialiased`)}>
+        <div className={cn('h-full w-full max-w-[1400px] overflow-hidden')}>
+          <Header />
+          <QueryProvider>
+            {children}
+            <Toaster position="top-center" expand={true} richColors />
+          </QueryProvider>
+        </div>
       </body>
     </html>
   );
