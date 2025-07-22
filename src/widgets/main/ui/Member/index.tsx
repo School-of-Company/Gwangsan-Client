@@ -14,6 +14,8 @@ import { Badge } from '@/shared/components/ui/badge';
 import { MoreHorizontal } from 'lucide-react';
 import { useGetMembers } from '../../model/useGetMembers';
 import { MEMBER_STATUS_KOR } from '@/shared/types/memberType';
+import { handleDate } from '@/shared/lib/handleDate';
+import { handleRoleName } from '@/views/detail/lib/handleRoleName';
 
 export default function Member() {
   const { data } = useGetMembers();
@@ -34,27 +36,29 @@ export default function Member() {
           {data &&
             data.map((member, idx) => (
               <TableRow key={idx}>
-                <TableCell className="whitespace-nowrap">
-                  <div className="flex flex-col">
+                <TableCell className={cn('whitespace-nowrap')}>
+                  <div className={cn('flex flex-col')}>
                     <span>
                       {member.nickname} | <span>{member.name}</span>
                     </span>
-                    <span className="text-muted-foreground text-sm">
+                    <span className={cn('text-muted-foreground text-sm')}>
                       {member.phoneNumber}
                     </span>
                   </div>
                 </TableCell>
-                <TableCell>{member.role}</TableCell>
+                <TableCell>{handleRoleName(member.role)}</TableCell>
                 <TableCell>
                   <Badge
-                    variant={
-                      member.status !== 'ACTIVE' ? 'destructive' : 'default'
-                    }
+                    className={cn(
+                      member.status === 'ACTIVE'
+                        ? 'text-sub-500'
+                        : 'text-error-500',
+                    )}
                   >
                     {MEMBER_STATUS_KOR[member.status]}
                   </Badge>
                 </TableCell>
-                <TableCell>{member.joinedAt}</TableCell>
+                <TableCell>{handleDate(member.joinedAt)}</TableCell>
                 <TableCell className="text-right">
                   <MoreHorizontal className="text-muted-foreground h-4 w-4 cursor-pointer" />
                 </TableCell>
