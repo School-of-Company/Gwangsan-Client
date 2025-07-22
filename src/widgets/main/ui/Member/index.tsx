@@ -11,14 +11,17 @@ import {
   TableRow,
 } from '@/shared/components/ui/table';
 import { Badge } from '@/shared/components/ui/badge';
-import { MoreHorizontal } from 'lucide-react';
 import { useGetMembers } from '../../model/useGetMembers';
 import { MEMBER_STATUS_KOR } from '@/shared/types/memberType';
 import { handleDate } from '@/shared/lib/handleDate';
 import { handleRoleName } from '@/views/detail/lib/handleRoleName';
+import { Button } from '@/shared/components/ui/button';
+import { useState } from 'react';
+import RoleModal from '@/entities/main/ui/RoleModal';
 
 export default function Member() {
   const { data } = useGetMembers();
+  const [show, setShow] = useState(false);
 
   return (
     <div className="w-full">
@@ -63,8 +66,15 @@ export default function Member() {
                   </TableCell>
                   <TableCell>{handleDate(member.joinedAt)}</TableCell>
                   <TableCell className="text-right">
-                    <MoreHorizontal className="text-muted-foreground h-4 w-4 cursor-pointer" />
+                    <Button onClick={() => setShow(true)} variant="outline">
+                      역할 변경
+                    </Button>
                   </TableCell>
+                  <RoleModal
+                    setShow={setShow}
+                    userName={member.name}
+                    open={show}
+                  />
                 </TableRow>
               ))}
           </TableBody>
