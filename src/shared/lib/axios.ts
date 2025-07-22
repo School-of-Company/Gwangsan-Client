@@ -71,7 +71,7 @@ instance.interceptors.response.use(
       originalRequest._retryCount += 1;
 
       try {
-        const refreshToken = getCookie(AUTH_REFRESH_TOKEN_KEY);
+        /* const refreshToken = getCookie(AUTH_REFRESH_TOKEN_KEY);
         if (!refreshToken) {
           throw new Error('No refresh token');
         }
@@ -87,7 +87,7 @@ instance.interceptors.response.use(
         setCookie(AUTH_TOKEN_KEY, accessToken, 604800);
 
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-        return instance(originalRequest);
+        return instance(originalRequest); */
       } catch (error) {
         clearTokens();
         window.location.href = authConfig.signInPage;
