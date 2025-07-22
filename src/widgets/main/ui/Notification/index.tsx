@@ -7,9 +7,9 @@ import { NotificationCard } from '@/entities/main';
 export default function Notification() {
   const { data } = useGetNotifications();
   return (
-    <div className="w-full">
+    <div className={cn('w-full')}>
       <h2 className={cn('ml-6 mt-[96px] text-titleMedium2')}>알림</h2>
-      <div>
+      <div className={cn('max-h-[600px] overflow-y-auto rounded-md')}>
         {data?.reports.flatMap((v) => (
           <NotificationCard key={v.id} data={v} type="REPORT" />
         ))}
