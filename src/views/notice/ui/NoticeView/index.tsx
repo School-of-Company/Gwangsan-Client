@@ -4,7 +4,11 @@ import WriteNotice from '@/widgets/notice/ui/WriteNotice';
 
 export default function NoticeView() {
   return (
-    <div className={cn('mt-[89px] flex h-full')}>
+    <div
+      className={cn(
+        'mt-[89px] flex h-screen w-full flex-col overflow-y-auto md:flex-row',
+      )}
+    >
       <PostedNotice />
       <div className={cn('h-full w-[1px] bg-[#828387]')} />
       <WriteNotice />
