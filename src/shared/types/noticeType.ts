@@ -7,6 +7,7 @@ export interface Notices {
   title: string;
   content: string;
   images?: ImageType[];
+  isMe: boolean;
 }
 
 export interface DetailNotice extends Notices {

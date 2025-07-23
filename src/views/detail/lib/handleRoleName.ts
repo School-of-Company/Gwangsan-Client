@@ -7,6 +7,6 @@ export const handleRoleName = (name: MemberRole) => {
     case 'ROLE_PLACE_ADMIN':
       return '코디네이터';
     case 'ROLE_USER':
-      return '주민';
+      return '일반 회원';
   }
 };

@@ -1,3 +1,5 @@
+import { MemberRole } from '../const/role';
+
 export type MEMBER_STATUS = 'ACTIVE' | 'SUSPENDED' | 'PENDING' | 'WITHDRAW';
 
 export const MEMBER_STATUS_KOR: Record<MEMBER_STATUS, string> = {
@@ -13,3 +15,13 @@ export const memberStatusOptions = Object.entries(MEMBER_STATUS_KOR).map(
     label,
   }),
 );
+
+export interface MemberType {
+  memberId: string;
+  nickname: string;
+  name: string;
+  phoneNumber: string;
+  role: MemberRole;
+  status: MEMBER_STATUS;
+  joinedAt: string;
+}

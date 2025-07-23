@@ -1,19 +1,17 @@
-import { AxiosError } from 'axios';
+import { AxiosResponse } from 'axios';
 import { instance } from '../lib/axios';
 import { MEMBER_STATUS } from '../types/memberType';
-import { toast } from 'sonner';
 
 export const changeStatus = async (
   id: string,
   MEMBER_STATUS: MEMBER_STATUS,
-) => {
+): Promise<AxiosResponse | null> => {
   try {
     const res = await instance.patch('/admin/status/' + id, {
       status: MEMBER_STATUS,
     });
-    if (res.status === 204) toast.success('상태 변경에 성공했습니다');
+    return res;
   } catch (error) {
-    toast.error('상태 변경에 실패했습니다');
     throw error;
   }
 };
