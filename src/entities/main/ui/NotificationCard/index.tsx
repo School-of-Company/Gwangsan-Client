@@ -10,9 +10,9 @@ import {
   Trade,
 } from '@/widgets/main/model/alertType';
 import { acceptTrade } from '../../api/acceptTrade';
-import { changeStatus } from '@/shared/api/changeStatus';
 import { ReportModal } from '@/widgets/main';
 import { useCallback, useState } from 'react';
+import { acceptSignup } from '../../api/acceptSignup';
 
 export type NotificationProps =
   | { type: 'REPORT'; data: Reports }
@@ -76,7 +76,7 @@ export default function NotificationCard({ type, data }: NotificationProps) {
             </span>
           </div>
           <Button
-            onClick={() => changeStatus(String(data.memberId), 'ACTIVE')}
+            onClick={() => acceptSignup(String(data.id))}
             className={cn('bg-main-500')}
           >
             ✓ 승인
