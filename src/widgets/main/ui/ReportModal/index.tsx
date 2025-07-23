@@ -21,6 +21,7 @@ import { Button } from '@/shared/components/ui/button';
 import { changeStatus } from '@/shared/api/changeStatus';
 import { toast } from 'sonner';
 import { deleteNotification } from '@/shared/api/deleteNotification';
+import { refuseNotifications } from '../../api/refuseNotification';
 
 interface ReportModalProps {
   open: boolean;
@@ -107,6 +108,12 @@ export default function ReportModal({
                 닫기
               </Button>
             </DialogClose>
+            <Button
+              onClick={() => refuseNotifications(notificationId)}
+              variant="outline"
+            >
+              신고 기각
+            </Button>
             <Button type="submit" variant="outline">
               적용하기
             </Button>
