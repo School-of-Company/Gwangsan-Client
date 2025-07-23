@@ -3,9 +3,11 @@
 import { cn } from '@/shared/lib/utils';
 import { useGetNotifications } from '../../model/useGetNotifications';
 import { NotificationCard } from '@/entities/main';
+import { toast } from 'sonner';
 
 export default function Notification() {
-  const { data } = useGetNotifications();
+  const { data, isError, error } = useGetNotifications();
+  if (isError) toast.error(error.message ?? '알림을 가져오는데 실패했습니다');
   return (
     <div className={cn('w-full')}>
       <h2 className={cn('ml-6 mt-[96px] text-titleMedium2')}>알림</h2>
