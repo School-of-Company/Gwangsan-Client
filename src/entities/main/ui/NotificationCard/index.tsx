@@ -58,6 +58,7 @@ export default function NotificationCard({ type, data }: NotificationProps) {
             reportedMemberName={data.reportedMemberName}
             content={data.report.content}
             memberId={data.reportedMemberId}
+            notificationId={String(data.id)}
           />
         </div>
       );
