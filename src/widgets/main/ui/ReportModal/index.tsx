@@ -5,7 +5,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from '@/shared/components/ui/dialog';
 import { REPORT_TYPE, REPORT_TYPE_KOR } from '../../model/alertType';
 import { ImageType } from '@/shared/types/imageType';
@@ -103,20 +102,13 @@ export default function ReportModal({
           </Select>
 
           <div className="flex justify-end gap-2">
-            <DialogClose asChild>
-              <Button type="button" variant="ghost">
-                닫기
-              </Button>
-            </DialogClose>
             <Button
               onClick={() => refuseNotifications(notificationId)}
               variant="outline"
             >
               신고 기각
             </Button>
-            <Button type="submit" variant="outline">
-              적용하기
-            </Button>
+            <Button type="submit">적용하기</Button>
           </div>
         </form>
       </DialogContent>
