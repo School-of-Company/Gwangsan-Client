@@ -9,11 +9,13 @@ import { ArrowLeft } from 'lucide-react';
 import { useCallback } from 'react';
 import { ImageSlider } from '@/entities/detail';
 import { handleDate } from '@/shared/lib/handleDate';
+import { toast } from 'sonner';
 
 export default function DetailView() {
   const { id } = useParams();
-  const { data } = useGetDetailNotice(String(id));
+  const { data, isError, error } = useGetDetailNotice(String(id));
   const R = useRouter();
+  if (isError) toast.error(error.message ?? '게시물을 가져오는데 실패했습니다');
 
   const handleClick = useCallback(() => {
     R.back();
