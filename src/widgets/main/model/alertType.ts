@@ -42,6 +42,7 @@ export interface Trade {
 }
 
 export interface SignUp {
+  id: string;
   memberId: number;
   nickname: string;
   title: string;

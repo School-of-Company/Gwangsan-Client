@@ -6,6 +6,6 @@ type AuthConfig = {
 
 export const authConfig: AuthConfig = {
   signInPage: '/signin',
-  protectedPages: ['/main'],
+  protectedPages: ['/main', '/notice', '/detail'],
   publicPages: ['/signin'],
 } as const;

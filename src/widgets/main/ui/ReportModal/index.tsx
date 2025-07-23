@@ -5,7 +5,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from '@/shared/components/ui/dialog';
 import { REPORT_TYPE, REPORT_TYPE_KOR } from '../../model/alertType';
 import { ImageType } from '@/shared/types/imageType';
@@ -19,6 +18,9 @@ import {
 import { MEMBER_STATUS, memberStatusOptions } from '@/shared/types/memberType';
 import { Button } from '@/shared/components/ui/button';
 import { changeStatus } from '@/shared/api/changeStatus';
+import { toast } from 'sonner';
+import { deleteNotification } from '@/shared/api/deleteNotification';
+import { refuseNotifications } from '../../api/refuseNotification';
 
 interface ReportModalProps {
   open: boolean;
@@ -29,6 +31,7 @@ interface ReportModalProps {
   reportType: REPORT_TYPE;
   images: ImageType[];
   memberId: number;
+  notificationId: string;
 }
 
 export default function ReportModal({
@@ -39,12 +42,21 @@ export default function ReportModal({
   content,
   reportType,
   memberId,
+  notificationId,
 }: ReportModalProps) {
-  const handleReport = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleReport = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const type = formData.get('MEMBER_STATUS');
-    if (type) changeStatus(String(memberId), type as MEMBER_STATUS);
+    if (type) {
+      const res = await changeStatus(String(memberId), type as MEMBER_STATUS);
+      if (res && res.status === 204) {
+        toast.success('상태 변경에 성공했습니다');
+        deleteNotification(notificationId);
+      } else {
+        toast.error('상태 변경에 실패했습니다');
+      }
+    }
     setShow(false);
   };
 
@@ -90,14 +102,13 @@ export default function ReportModal({
           </Select>
 
           <div className="flex justify-end gap-2">
-            <DialogClose asChild>
-              <Button type="button" variant="ghost">
-                닫기
-              </Button>
-            </DialogClose>
-            <Button type="submit" variant="outline">
-              적용하기
+            <Button
+              onClick={() => refuseNotifications(notificationId)}
+              variant="outline"
+            >
+              신고 기각
             </Button>
+            <Button type="submit">적용하기</Button>
           </div>
         </form>
       </DialogContent>
