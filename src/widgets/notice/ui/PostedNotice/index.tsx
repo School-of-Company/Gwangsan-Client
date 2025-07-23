@@ -24,6 +24,7 @@ export default function PostedNotice() {
               content={v.content}
               key={v.id}
               id={v.id}
+              isMe={v.isMe}
             />
           );
         })}
