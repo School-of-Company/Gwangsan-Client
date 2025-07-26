@@ -30,7 +30,9 @@ export default function PostedNotice() {
             );
           })
         ) : (
-          <div className={cn('text-center')}>공지사항이 없습니다</div>
+          <div className={cn('py-8 text-center text-gray-400')}>
+            공지사항이 없습니다
+          </div>
         )}
       </div>
     </div>
