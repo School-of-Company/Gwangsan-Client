@@ -14,9 +14,13 @@ export default function NoticeCard({ title, id, content, isMe }: Notices) {
     R.push('/detail/' + id);
   }, [R, id]);
 
-  const handleDelete = useCallback(() => {
-    deletePost(String(id));
-  }, [id]);
+  const handleDelete = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      deletePost(String(id));
+    },
+    [id],
+  );
   return (
     <article
       className={cn('flex justify-between rounded-xl border p-6')}

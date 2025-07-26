@@ -4,23 +4,41 @@ import { cn } from '@/shared/lib/utils';
 import { useGetNotifications } from '../../model/useGetNotifications';
 import { NotificationCard } from '@/entities/main';
 import { toast } from 'sonner';
+import { useMemo } from 'react';
 
 export default function Notification() {
   const { data, isError, error } = useGetNotifications();
+
   if (isError) toast.error(error.message ?? '알림을 가져오는데 실패했습니다');
+
+  const entire = useMemo(() => {
+    if (!data) return [];
+    return [
+      ...(data.reports ?? []),
+      ...(data.signUps ?? []),
+      ...(data.trades ?? []),
+    ];
+  }, [data]);
+
   return (
     <div className={cn('mx-6 w-full')}>
       <h2 className={cn('mb-[28px] ml-6 mt-[96px] text-titleMedium2')}>알림</h2>
       <div className={cn('max-h-[600px] overflow-y-auto rounded-md')}>
-        {data?.reports.flatMap((v) => (
-          <NotificationCard key={v.id} data={v} type="REPORT" />
-        ))}
-        {data?.signUps.map((v) => {
-          return <NotificationCard key={v.memberId} data={v} type="SIGN_UP" />;
-        })}
-        {data?.trades.map((v) => {
-          return <NotificationCard data={v} key={v.product.id} type="TRADE" />;
-        })}
+        {entire.length === 0 ? (
+          <div className="py-8 text-center text-gray-400">알림이 없습니다.</div>
+        ) : (
+          <>
+            {data?.reports.map((v) => (
+              <NotificationCard key={v.id} data={v} type="REPORT" />
+            ))}
+            {data?.signUps.map((v) => (
+              <NotificationCard key={v.memberId} data={v} type="SIGN_UP" />
+            ))}
+            {data?.trades.map((v) => (
+              <NotificationCard key={v.product.id} data={v} type="TRADE" />
+            ))}
+          </>
+        )}
       </div>
     </div>
   );

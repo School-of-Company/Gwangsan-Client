@@ -17,17 +17,23 @@ export default function PostedNotice() {
           'mt-[28px] flex h-[100vh] flex-col gap-3 overflow-y-visible',
         )}
       >
-        {data?.map((v) => {
-          return (
-            <NoticeCard
-              title={v.title}
-              content={v.content}
-              key={v.id}
-              id={v.id}
-              isMe={v.isMe}
-            />
-          );
-        })}
+        {data && data?.length > 0 ? (
+          data?.map((v) => {
+            return (
+              <NoticeCard
+                title={v.title}
+                content={v.content}
+                key={v.id}
+                id={v.id}
+                isMe={v.isMe}
+              />
+            );
+          })
+        ) : (
+          <div className={cn('py-8 text-center text-gray-400')}>
+            공지사항이 없습니다
+          </div>
+        )}
       </div>
     </div>
   );
