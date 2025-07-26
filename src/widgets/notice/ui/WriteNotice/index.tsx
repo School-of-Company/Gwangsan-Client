@@ -40,7 +40,6 @@ export default function WriteNotice() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    // imageIds를 formData에 추가
     imageIds.forEach((id) => formData.append('imageIds', id.toString()));
     await handlePostNotice(formData);
     setImageIds([]);
