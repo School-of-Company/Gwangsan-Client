@@ -7,7 +7,7 @@ export const deletePost = async (id: string) => {
     toast.success('게시글이 삭제되었습니다');
     return res;
   } catch (error) {
-    toast.error('게시글 삭제 실패했습니다');
+    toast.error('게시글 삭제에 실패했습니다');
     throw error;
   }
 };
