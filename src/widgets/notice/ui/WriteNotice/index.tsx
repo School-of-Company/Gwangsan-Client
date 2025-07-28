@@ -117,6 +117,7 @@ export default function WriteNotice() {
             <Button
               size="sm"
               type="button"
+              variant="outline"
               onClick={() => fileInputRef.current?.click()}
             >
               파일첨부
