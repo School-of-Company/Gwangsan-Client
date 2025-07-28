@@ -85,7 +85,7 @@ export default function WriteNotice() {
           </label>
           <Select name="placeName">
             <SelectTrigger>
-              <SelectValue placeholder="본점을 선택해주세요" />
+              <SelectValue placeholder="대상 지점을 선택해주세요" />
             </SelectTrigger>
             <SelectContent className={cn('w-full bg-white')}>
               <SelectGroup id="placeName">
