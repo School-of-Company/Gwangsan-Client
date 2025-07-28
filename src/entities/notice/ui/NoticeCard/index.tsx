@@ -19,7 +19,16 @@ import {
   AlertDialogTrigger,
 } from '@/shared/components/ui/alert-dialog';
 
-export default function NoticeCard({ title, id, content, isMe }: Notices) {
+type NoticesWithRefetch = Notices & {
+  refetch: () => void;
+};
+export default function NoticeCard({
+  title,
+  id,
+  content,
+  isMe,
+  refetch,
+}: NoticesWithRefetch) {
   const R = useRouter();
   const [open, setOpen] = useState(false);
 
@@ -30,10 +39,8 @@ export default function NoticeCard({ title, id, content, isMe }: Notices) {
   const handleDelete = useCallback(() => {
     deletePost(String(id));
     setOpen(false);
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
-  }, [id]);
+    refetch();
+  }, [id, refetch]);
 
   return (
     <article
