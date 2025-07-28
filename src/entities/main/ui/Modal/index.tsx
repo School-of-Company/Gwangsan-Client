@@ -70,7 +70,7 @@ export default function Modal({
             <SelectTrigger>
               <SelectValue
                 placeholder={
-                  type === 'role' ? '역할을' : '상태를' + ' 선택하세요'
+                  `${type === 'role' ? '역할을' : '상태를'} 선택하세요`
                 }
               />
             </SelectTrigger>
