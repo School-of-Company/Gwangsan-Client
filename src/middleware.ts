@@ -30,6 +30,7 @@ export function middleware(request: NextRequest) {
   }
 
   const hasAccessToken = request.cookies.has('accessToken');
+  const hasRefreshToken = request.cookies.has('refreshToken');
 
   const isProtectedPage = authConfig.protectedPages.some((path: string) =>
     currentPath.startsWith(path),
@@ -40,7 +41,15 @@ export function middleware(request: NextRequest) {
   );
 
   if (!hasAccessToken && isProtectedPage) {
-    return NextResponse.redirect(new URL(authConfig.signInPage, request.url));
+    if (hasRefreshToken) {
+      return NextResponse.next({
+        request: {
+          headers: requestHeaders,
+        },
+      });
+    } else {
+      return NextResponse.redirect(new URL(authConfig.signInPage, request.url));
+    }
   }
 
   if (hasAccessToken && isAuthPage) {

@@ -22,6 +22,24 @@ export const instance = axios.create({
   },
 });
 
+let isRefreshing = false;
+let failedQueue: Array<{
+  resolve: (token: string) => void;
+  reject: (error: any) => void;
+}> = [];
+
+const processQueue = (error: any, token: string | null = null) => {
+  failedQueue.forEach(({ resolve, reject }) => {
+    if (error) {
+      reject(error);
+    } else {
+      resolve(token!);
+    }
+  });
+
+  failedQueue = [];
+};
+
 instance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     if (typeof window !== 'undefined') {
@@ -33,6 +51,7 @@ instance.interceptors.request.use(
     return config;
   },
   (error: AxiosError) => {
+    console.error('[ㅌAuth] Request interceptor error:', error);
     return Promise.reject(error);
   },
 );
@@ -42,59 +61,88 @@ instance.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
-    if (typeof window === 'undefined') {
-      return Promise.reject(error);
-    }
-
+    if (typeof window === 'undefined') return Promise.reject(error);
     const originalRequest = error.config as InternalAxiosRequestConfig & {
       _retry?: boolean;
-      _retryCount?: number;
     };
 
-    // 재시도 횟수 제한: 2회
-    if (!originalRequest._retryCount) {
-      originalRequest._retryCount = 0;
-    }
-    if (originalRequest._retryCount >= 2) {
+    if (error.response?.status !== 401) {
       return Promise.reject(error);
     }
 
-    if (
-      originalRequest.url?.includes('/admin/signin') &&
-      error.response?.status === 401
-    ) {
+    const SKIP_PATHS = ['/signin', '/admin/signin', '/auth/reissue'];
+    const shouldSkip = SKIP_PATHS.some((path) =>
+      originalRequest.url?.includes(path),
+    );
+
+    if (shouldSkip) {
       return Promise.reject(error);
     }
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      originalRequest._retryCount += 1;
+    if (originalRequest._retry) {
+      return Promise.reject(error);
+    }
 
-      try {
-        /* const refreshToken = getCookie(AUTH_REFRESH_TOKEN_KEY);
-        if (!refreshToken) {
-          throw new Error('No refresh token');
-        }
+    originalRequest._retry = true;
 
-        const response = await instance.post<{ accessToken: string }>(
-          '/auth/refresh',
-          {
-            refreshToken,
+    if (isRefreshing) {
+      return new Promise((resolve, reject) => {
+        failedQueue.push({
+          resolve: (token: string) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            resolve(instance(originalRequest));
           },
-        );
-
-        const { accessToken } = response.data;
-        setCookie(AUTH_TOKEN_KEY, accessToken, 604800);
-
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-        return instance(originalRequest); */
-      } catch (error) {
-        clearTokens();
-        window.location.href = authConfig.signInPage;
-        return Promise.reject(error);
-      }
+          reject: (err: any) => {
+            reject(err);
+          },
+        });
+      });
     }
 
-    return Promise.reject(error);
+    isRefreshing = true;
+    try {
+      const refreshToken = getCookie(AUTH_REFRESH_TOKEN_KEY);
+      if (!refreshToken) {
+        throw new Error('No refresh token available');
+      }
+
+      const refreshInstance = axios.create({
+        baseURL,
+        timeout: 10000,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const response = await refreshInstance.patch<{ accessToken: string }>(
+        '/auth/reissue',
+        { refreshToken },
+      );
+
+      const { accessToken } = response.data;
+
+      setCookie(AUTH_TOKEN_KEY, accessToken, 86400);
+      processQueue(null, accessToken);
+      originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+
+      return instance(originalRequest);
+    } catch (refreshError) {
+      processQueue(refreshError, null);
+
+      clearTokens();
+
+      const currentPath = window.location.pathname;
+      const isProtectedPage = authConfig.protectedPages.some((path: string) =>
+        currentPath.startsWith(path),
+      );
+
+      if (isProtectedPage) {
+        window.location.href = authConfig.signInPage;
+      }
+
+      return Promise.reject(refreshError);
+    } finally {
+      isRefreshing = false;
+    }
   },
 );
