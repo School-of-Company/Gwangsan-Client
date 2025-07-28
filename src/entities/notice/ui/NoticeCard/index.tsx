@@ -30,6 +30,9 @@ export default function NoticeCard({ title, id, content, isMe }: Notices) {
   const handleDelete = useCallback(() => {
     deletePost(String(id));
     setOpen(false);
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
   }, [id]);
 
   return (
