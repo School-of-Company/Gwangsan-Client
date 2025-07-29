@@ -115,8 +115,13 @@ instance.interceptors.response.use(
       });
 
       const response = await refreshInstance.patch<{ accessToken: string }>(
-        '/auth/reissue',
-        { refreshToken },
+        'auth/reissue',
+        {}, 
+        {
+          headers: {
+            RefreshToken: refreshToken,
+          },
+        }
       );
 
       const { accessToken } = response.data;
