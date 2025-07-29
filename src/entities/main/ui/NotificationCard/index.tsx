@@ -75,6 +75,7 @@ export default function NotificationCard({
             content={data.report.content}
             memberId={data.reportedMemberId}
             notificationId={String(data.id)}
+            refetch={refetch}
           />
         </div>
       );
