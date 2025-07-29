@@ -31,6 +31,7 @@ interface ReportModalProps {
   reportType: REPORT_TYPE;
   images: ImageType[];
   memberId: number;
+  refetch: () => void;
   notificationId: string;
 }
 
@@ -42,6 +43,7 @@ export default function ReportModal({
   content,
   reportType,
   memberId,
+  refetch,
   notificationId,
 }: ReportModalProps) {
   const handleReport = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -53,6 +55,7 @@ export default function ReportModal({
       if (res && res.status === 204) {
         toast.success('상태 변경에 성공했습니다');
         deleteNotification(notificationId);
+        refetch();
       } else {
         toast.error('상태 변경에 실패했습니다');
       }
@@ -103,7 +106,10 @@ export default function ReportModal({
 
           <div className="flex justify-end gap-2">
             <Button
-              onClick={() => refuseNotifications(notificationId)}
+              onClick={() => {
+                refuseNotifications(notificationId);
+                refetch();
+              }}
               variant="outline"
             >
               신고 기각
