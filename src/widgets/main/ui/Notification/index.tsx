@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { useMemo } from 'react';
 
 export default function Notification() {
-  const { data, isError, error } = useGetNotifications();
+  const { data, isError, error, refetch } = useGetNotifications();
 
   if (isError) toast.error(error.message ?? '알림을 가져오는데 실패했습니다');
 
@@ -29,13 +29,28 @@ export default function Notification() {
         ) : (
           <>
             {data?.reports.map((v) => (
-              <NotificationCard key={v.id} data={v} type="REPORT" />
+              <NotificationCard
+                refetch={refetch}
+                key={v.id}
+                data={v}
+                type="REPORT"
+              />
             ))}
             {data?.signUps.map((v) => (
-              <NotificationCard key={v.memberId} data={v} type="SIGN_UP" />
+              <NotificationCard
+                refetch={refetch}
+                key={v.memberId}
+                data={v}
+                type="SIGN_UP"
+              />
             ))}
             {data?.trades.map((v) => (
-              <NotificationCard key={v.product.id} data={v} type="TRADE" />
+              <NotificationCard
+                refetch={refetch}
+                key={v.product.id}
+                data={v}
+                type="TRADE"
+              />
             ))}
           </>
         )}

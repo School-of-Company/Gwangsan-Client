@@ -8,7 +8,6 @@ import {
   DialogTitle,
 } from '@/shared/components/ui/dialog';
 import { Label } from '@/shared/components/ui/label';
-import { Button } from '@/shared/components/ui/button';
 import {
   Select,
   SelectTrigger,
@@ -16,39 +15,21 @@ import {
   SelectItem,
   SelectValue,
 } from '@/shared/components/ui/select';
-import { useState } from 'react';
-import { changeRole } from '@/widgets/main/api/changeRole';
 import { MemberRole, memberRoleOptions } from '@/shared/const/role';
 import { MEMBER_STATUS, memberStatusOptions } from '@/shared/types/memberType';
-import { changeStatus } from '@/shared/api/changeStatus';
+import { useChangeStatus } from '@/shared/model/useChangeStatus';
+import { useChangeRole } from '@/widgets/main/model/useChangeRole';
 
-interface EditRoleDialogProps {
+interface DialogProps {
   open: boolean;
   setShow: (v: boolean) => void;
-  id: string;
-  name: string;
   type: 'role' | 'status';
+  selected: { name: string; id: string; status: string; role: string };
 }
 
-export default function Modal({
-  open,
-  setShow,
-  name,
-  id,
-  type,
-}: EditRoleDialogProps) {
-  const [selected, setSelected] = useState<
-    MEMBER_STATUS | MemberRole | undefined
-  >(undefined);
-
-  const handleSave = () => {
-    if (!selected) return;
-    type === 'role'
-      ? changeRole(id, selected as MemberRole)
-      : changeStatus(id, selected as MEMBER_STATUS);
-    setShow(false);
-  };
-
+export default function Modal({ open, setShow, type, selected }: DialogProps) {
+  const { mutate: changeStatus } = useChangeStatus();
+  const { mutate: changeRole } = useChangeRole();
   return (
     <Dialog open={open} onOpenChange={setShow}>
       <DialogContent className="z-50 rounded-xl bg-white sm:max-w-[400px]">
@@ -57,21 +38,26 @@ export default function Modal({
             {type === 'role' ? '역할 수정' : '상태 수정'}
           </DialogTitle>
           <DialogDescription>
-            {`${name}님의 ${type === 'role' ? '역할' : '상태'}을 수정합니다`}
+            {`${selected.name}님의 ${type === 'role' ? '역할' : '상태'}을 수정합니다`}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-2">
           <Label>{type === 'role' ? '역할' : '상태'}</Label>
           <Select
-            value={selected}
-            onValueChange={(e) => setSelected(e as MemberRole)}
+            value={type === 'role' ? selected.role : selected.status}
+            onValueChange={(e) => {
+              if (type === 'role') {
+                changeRole({ id: String(selected.id), role: e as MemberRole });
+              } else {
+                changeStatus({ id: selected.id, status: e as MEMBER_STATUS });
+              }
+              setShow(false);
+            }}
           >
             <SelectTrigger>
               <SelectValue
-                placeholder={
-                  `${type === 'role' ? '역할을' : '상태를'} 선택하세요`
-                }
+                placeholder={`${type === 'role' ? '역할을' : '상태를'} 선택하세요`}
               />
             </SelectTrigger>
             <SelectContent className="bg-white">
@@ -89,15 +75,6 @@ export default function Modal({
             </SelectContent>
           </Select>
         </div>
-
-        <Button
-          onClick={handleSave}
-          className="mt-6 w-full"
-          variant="outline"
-          disabled={!selected}
-        >
-          저장하기
-        </Button>
       </DialogContent>
     </Dialog>
   );

@@ -9,21 +9,37 @@ import {
   SignUp,
   Trade,
 } from '@/widgets/main/model/alertType';
-import { acceptTrade } from '../../api/acceptTrade';
 import { ReportModal } from '@/widgets/main';
 import { useCallback, useState } from 'react';
 import { acceptSignup } from '../../api/acceptSignup';
+import { acceptTrade } from '../../api/acceptTrade';
 
 export type NotificationProps =
-  | { type: 'REPORT'; data: Reports }
-  | { type: 'SIGN_UP'; data: SignUp }
-  | { type: 'TRADE'; data: Trade };
+  | { type: 'REPORT'; data: Reports; refetch: () => void }
+  | { type: 'SIGN_UP'; data: SignUp; refetch: () => void }
+  | { type: 'TRADE'; data: Trade; refetch: () => void };
 
-export default function NotificationCard({ type, data }: NotificationProps) {
+export default function NotificationCard({
+  type,
+  data,
+  refetch,
+}: NotificationProps) {
   const [show, setShow] = useState(false);
   const handleReportClick = useCallback(() => {
     setShow(true);
   }, []);
+
+  const handleClick = useCallback(
+    async (id: string) => {
+      const res = await (type === 'SIGN_UP'
+        ? acceptSignup(id)
+        : acceptTrade(id));
+      if (res.status === 204) {
+        setTimeout(refetch, 1000);
+      }
+    },
+    [type, refetch],
+  );
   switch (type) {
     case 'REPORT':
       return (
@@ -59,6 +75,7 @@ export default function NotificationCard({ type, data }: NotificationProps) {
             content={data.report.content}
             memberId={data.reportedMemberId}
             notificationId={String(data.id)}
+            refetch={refetch}
           />
         </div>
       );
@@ -77,7 +94,7 @@ export default function NotificationCard({ type, data }: NotificationProps) {
             </span>
           </div>
           <Button
-            onClick={() => acceptSignup(String(data.id))}
+            onClick={() => handleClick(data.id.toString())}
             className={cn('bg-main-500')}
           >
             ✓ 승인
@@ -96,7 +113,7 @@ export default function NotificationCard({ type, data }: NotificationProps) {
             </strong>
           </div>
           <Button
-            onClick={() => acceptTrade(String(data.product.id))}
+            onClick={() => handleClick(data.product.id.toString())}
             className={cn('bg-main-500')}
           >
             거래완료

@@ -6,7 +6,7 @@ import { NoticeCard } from '@/entities/notice';
 import { toast } from 'sonner';
 
 export default function PostedNotice() {
-  const { data, isError, error } = useGetNotices();
+  const { data, isError, error, refetch } = useGetNotices();
   if (isError)
     toast.error(error.message ?? '공지사항을 불러오는데 실패했습니다');
   return (
@@ -26,6 +26,7 @@ export default function PostedNotice() {
                 key={v.id}
                 id={v.id}
                 isMe={v.isMe}
+                refetch={refetch}
               />
             );
           })

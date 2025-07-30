@@ -25,7 +25,12 @@ export default function Member() {
   const { data, isError, error } = useGetMembers();
   const [roleModalShow, setRoleModalShow] = useState(false);
   const [statusModalShow, setStatusModalShow] = useState(false);
-  const [selected, setSelected] = useState({ name: '', id: '' });
+  const [selected, setSelected] = useState({
+    name: '',
+    id: '',
+    status: '',
+    role: '',
+  });
   const [selectedMoreId, setSelectedMoreId] = useState<string | null>(null);
 
   if (isError)
@@ -84,6 +89,8 @@ export default function Member() {
                           setSelected({
                             name: member.name,
                             id: member.memberId,
+                            status: member.status,
+                            role: member.role,
                           });
                           toggleMore(member.memberId);
                         }}
@@ -125,16 +132,14 @@ export default function Member() {
         </Table>
         <Modal
           setShow={setRoleModalShow}
-          id={selected.id}
           type="role"
-          name={selected.name}
           open={roleModalShow}
+          selected={selected}
         />
         <Modal
           type="status"
           setShow={setStatusModalShow}
-          id={selected.id}
-          name={selected.name}
+          selected={selected}
           open={statusModalShow}
         />
       </div>
