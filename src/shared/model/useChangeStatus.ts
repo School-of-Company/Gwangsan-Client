@@ -23,7 +23,7 @@ export const useChangeStatus = () => {
 
       return { previousMembers };
     },
-    onError: (err, variables, context) => {
+    onError: (_err, _variables, context) => {
       if (context?.previousMembers) {
         queryClient.setQueryData(['members'], context.previousMembers);
       }
