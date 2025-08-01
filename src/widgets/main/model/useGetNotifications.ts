@@ -2,14 +2,14 @@ import { useQuery } from '@tanstack/react-query';
 import { getNotifications } from '../api/getNotifications';
 import { Reports, SignUp, Trade } from './alertType';
 
-interface Response {
+export interface NotificationResponse {
   reports: Reports[];
   signUps: SignUp[];
   trades: Trade[];
 }
 
 export const useGetNotifications = () => {
-  return useQuery<Response>({
+  return useQuery<NotificationResponse>({
     queryKey: ['notification'],
     queryFn: getNotifications,
   });

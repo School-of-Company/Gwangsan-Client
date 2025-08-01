@@ -1,12 +1,12 @@
 import { MemberRole } from '../const/role';
 
-export type MEMBER_STATUS = 'ACTIVE' | 'SUSPENDED' | 'PENDING' | 'WITHDRAW';
+export type MEMBER_STATUS = 'ACTIVE' | 'SUSPENDED' | 'PENDING' | 'WITHDRAWN';
 
 export const MEMBER_STATUS_KOR: Record<MEMBER_STATUS, string> = {
   ACTIVE: '활동',
   SUSPENDED: '정지',
   PENDING: '대기',
-  WITHDRAW: '탈퇴',
+  WITHDRAWN: '탈퇴',
 } as const;
 
 export const memberStatusOptions = Object.entries(MEMBER_STATUS_KOR).map(

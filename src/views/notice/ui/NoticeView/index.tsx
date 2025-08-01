@@ -6,7 +6,7 @@ export default function NoticeView() {
   return (
     <div
       className={cn(
-        'mt-[89px] flex h-screen w-full flex-col overflow-y-auto md:flex-row',
+        'mt-[89px] flex min-h-screen w-full flex-col overflow-y-auto md:flex-row',
       )}
     >
       <PostedNotice />

@@ -40,7 +40,6 @@ export default function WriteNotice() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    // imageIds를 formData에 추가
     imageIds.forEach((id) => formData.append('imageIds', id.toString()));
     await handlePostNotice(formData);
     setImageIds([]);
@@ -86,7 +85,7 @@ export default function WriteNotice() {
           </label>
           <Select name="placeName">
             <SelectTrigger>
-              <SelectValue placeholder="본점을 선택해주세요" />
+              <SelectValue placeholder="대상 지점을 선택해주세요" />
             </SelectTrigger>
             <SelectContent className={cn('w-full bg-white')}>
               <SelectGroup id="placeName">
@@ -118,6 +117,7 @@ export default function WriteNotice() {
             <Button
               size="sm"
               type="button"
+              variant="outline"
               onClick={() => fileInputRef.current?.click()}
             >
               파일첨부

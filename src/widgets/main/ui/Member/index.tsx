@@ -17,15 +17,29 @@ import { handleDate } from '@/shared/lib/handleDate';
 import { handleRoleName } from '@/views/detail/lib/handleRoleName';
 import { Button } from '@/shared/components/ui/button';
 import { useState } from 'react';
-import RoleModal from '@/entities/main/ui/RoleModal';
+import Modal from '@/entities/main/ui/Modal';
 import { toast } from 'sonner';
+import { MoreHorizontal } from 'lucide-react';
 
 export default function Member() {
   const { data, isError, error } = useGetMembers();
-  const [show, setShow] = useState(false);
-  const [selected, setSelected] = useState({ name: '', id: '' });
+  const [roleModalShow, setRoleModalShow] = useState(false);
+  const [statusModalShow, setStatusModalShow] = useState(false);
+  const [selected, setSelected] = useState({
+    name: '',
+    id: '',
+    status: '',
+    role: '',
+  });
+  const [selectedMoreId, setSelectedMoreId] = useState<string | null>(null);
+
   if (isError)
     toast.error(error.message ?? '회원 목록을 가져오는데 실패했습니다');
+
+  const toggleMore = (id: string) => {
+    setSelectedMoreId((prev) => (prev === id ? null : id));
+  };
+
   return (
     <div className="w-full">
       <h2 className={cn('mb-[28px] mt-[96px] text-titleMedium2')}>회원목록</h2>
@@ -69,27 +83,66 @@ export default function Member() {
                   </TableCell>
                   <TableCell>{handleDate(member.joinedAt)}</TableCell>
                   <TableCell className="text-right">
-                    <Button
-                      onClick={() => {
-                        setSelected({ name: member.name, id: member.memberId });
-                        setShow(true);
-                      }}
-                      variant="outline"
-                    >
-                      역할 변경
-                    </Button>
+                    <div className="relative inline-block">
+                      <MoreHorizontal
+                        onClick={() => {
+                          setSelected({
+                            name: member.name,
+                            id: member.memberId,
+                            status: member.status,
+                            role: member.role,
+                          });
+                          toggleMore(member.memberId);
+                        }}
+                        className="text-muted-foreground h-4 w-4 cursor-pointer"
+                      />
+                      {selectedMoreId === member.memberId && (
+                        <ul className="absolute right-0 z-10 mt-2 w-32 rounded-md border bg-white shadow-md">
+                          <li>
+                            <Button
+                              variant="ghost"
+                              className="w-full justify-start"
+                              onClick={() => {
+                                setStatusModalShow(true);
+                                setSelectedMoreId(null);
+                              }}
+                            >
+                              상태 변경
+                            </Button>
+                          </li>
+                          <li>
+                            <Button
+                              variant="ghost"
+                              className="w-full justify-start"
+                              onClick={() => {
+                                setRoleModalShow(true);
+                                setSelectedMoreId(null);
+                              }}
+                            >
+                              역할 변경
+                            </Button>
+                          </li>
+                        </ul>
+                      )}
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
           </TableBody>
         </Table>
+        <Modal
+          setShow={setRoleModalShow}
+          type="role"
+          open={roleModalShow}
+          selected={selected}
+        />
+        <Modal
+          type="status"
+          setShow={setStatusModalShow}
+          selected={selected}
+          open={statusModalShow}
+        />
       </div>
-      <RoleModal
-        setShow={setShow}
-        id={selected.id}
-        name={selected.name}
-        open={show}
-      />
       <GoNotice />
     </div>
   );

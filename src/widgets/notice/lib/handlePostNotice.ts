@@ -23,6 +23,9 @@ export const handlePostNotice = async (formData: FormData) => {
     if (res) {
       if (res.status === 201) {
         toast.success('공지가 작성되었습니다');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       } else {
         toast.error(
           res.status === 403
