@@ -4,7 +4,7 @@ import { removeCookie } from '../lib/cookies';
 
 export const signout = async () => {
   try {
-    instance.delete('/auth/signout');
+    await instance.delete('/auth/signout');
     removeCookie('accessToken');
     removeCookie('refreshToken');
     toast.success('로그아웃에 성공했습니다');
