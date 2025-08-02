@@ -4,7 +4,7 @@ import { removeCookie } from '../lib/cookies';
 
 export const deleteAccount = async () => {
   try {
-    await instance.delete('member');
+    await instance.delete('/member');
     removeCookie('accessToken');
     removeCookie('refreshToken');
     toast.success('회원탈퇴에 성공했습니다');
