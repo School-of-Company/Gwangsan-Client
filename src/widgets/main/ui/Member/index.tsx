@@ -16,7 +16,7 @@ import { MEMBER_STATUS_KOR } from '@/shared/types/memberType';
 import { handleDate } from '@/shared/lib/handleDate';
 import { handleRoleName } from '@/views/detail/lib/handleRoleName';
 import { Button } from '@/shared/components/ui/button';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import Modal from '@/entities/main/ui/Modal';
 import { toast } from 'sonner';
 import { MoreHorizontal, SearchIcon } from 'lucide-react';
@@ -49,6 +49,12 @@ export default function Member() {
     role: '',
   });
   const [selectedMoreId, setSelectedMoreId] = useState<string | null>(null);
+  const [role, setRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedRole = storage.getItem('role');
+    setRole(storedRole);
+  }, []);
 
   if (isError)
     toast.error(error.message ?? '회원 목록을 가져오는데 실패했습니다');
@@ -61,7 +67,6 @@ export default function Member() {
     setModalState((prev) => ({ ...prev, role: true }));
     setSelectedMoreId(null);
   }, []);
-  const role = storage.getItem('role');
   return (
     <div className="w-full">
       <h2 className={cn('mb-[28px] mt-[96px] text-titleMedium2')}>회원목록</h2>
@@ -80,7 +85,7 @@ export default function Member() {
           }
         />
       </div>
-      {role !== 'ROLE_PLACE_ADMIN' && (
+      {role !== null && role !== 'ROLE_PLACE_ADMIN' && (
         <div>
           <label className={cn('mb-1 block text-sm font-medium')}>
             대상 지점
