@@ -16,10 +16,19 @@ import { MEMBER_STATUS_KOR } from '@/shared/types/memberType';
 import { handleDate } from '@/shared/lib/handleDate';
 import { handleRoleName } from '@/views/detail/lib/handleRoleName';
 import { Button } from '@/shared/components/ui/button';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import Modal from '@/entities/main/ui/Modal';
 import { toast } from 'sonner';
 import { MoreHorizontal } from 'lucide-react';
+import {
+  SelectTrigger,
+  SelectValue,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+} from '@/shared/components/ui/select';
+import { PLACES } from '@/shared/const/place';
 
 export default function Member() {
   const { data, isError, error } = useGetMembers();
@@ -40,10 +49,33 @@ export default function Member() {
     setSelectedMoreId((prev) => (prev === id ? null : id));
   };
 
+  const handleChange = useCallback(() => {
+    setRoleModalShow(true);
+    setSelectedMoreId(null);
+  }, []);
+
   return (
     <div className="w-full">
       <h2 className={cn('mb-[28px] mt-[96px] text-titleMedium2')}>회원목록</h2>
-
+      <div>
+        <label className={cn('mb-1 block text-sm font-medium')}>
+          대상 지점
+        </label>
+        <Select name="placeName">
+          <SelectTrigger>
+            <SelectValue placeholder="대상 지점을 선택해주세요" />
+          </SelectTrigger>
+          <SelectContent className={cn('w-full bg-white')}>
+            <SelectGroup id="placeName">
+              {PLACES.map((v) => (
+                <SelectItem className={cn('w-full bg-white')} value={v} key={v}>
+                  {v}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
       <div className="max-h-[600px] overflow-y-auto rounded-md border">
         <Table>
           <TableHeader className="sticky top-0 z-10 bg-white">
@@ -102,10 +134,7 @@ export default function Member() {
                             <Button
                               variant="ghost"
                               className="w-full justify-start"
-                              onClick={() => {
-                                setStatusModalShow(true);
-                                setSelectedMoreId(null);
-                              }}
+                              onClick={handleChange}
                             >
                               상태 변경
                             </Button>
@@ -114,10 +143,7 @@ export default function Member() {
                             <Button
                               variant="ghost"
                               className="w-full justify-start"
-                              onClick={() => {
-                                setRoleModalShow(true);
-                                setSelectedMoreId(null);
-                              }}
+                              onClick={handleChange}
                             >
                               역할 변경
                             </Button>
