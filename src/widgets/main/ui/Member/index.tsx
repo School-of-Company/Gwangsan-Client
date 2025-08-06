@@ -19,7 +19,7 @@ import { Button } from '@/shared/components/ui/button';
 import { useCallback, useState } from 'react';
 import Modal from '@/entities/main/ui/Modal';
 import { toast } from 'sonner';
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, SearchIcon } from 'lucide-react';
 import {
   SelectTrigger,
   SelectValue,
@@ -29,11 +29,14 @@ import {
   SelectItem,
 } from '@/shared/components/ui/select';
 import { PLACES } from '@/shared/const/place';
+import { Input } from '@/shared/components/ui/input';
 
 export default function Member() {
   const { data, isError, error } = useGetMembers();
-  const [roleModalShow, setRoleModalShow] = useState(false);
-  const [statusModalShow, setStatusModalShow] = useState(false);
+  const [modalState, setModalState] = useState({
+    role: false,
+    status: false,
+  });
   const [selected, setSelected] = useState({
     name: '',
     id: '',
@@ -50,21 +53,30 @@ export default function Member() {
   }, []);
 
   const handleChange = useCallback(() => {
-    setRoleModalShow(true);
+    setModalState((prev) => ({ ...prev, role: true }));
     setSelectedMoreId(null);
   }, []);
   return (
     <div className="w-full">
       <h2 className={cn('mb-[28px] mt-[96px] text-titleMedium2')}>회원목록</h2>
+      <label className={cn('mb-1 block text-sm font-medium')}>
+        닉네임 검색
+      </label>
+      <div className="relative">
+        <span className="text-muted-foreground absolute right-3 top-1/2 -translate-y-1/2">
+          <SearchIcon />
+        </span>
+        <Input className="mb-6 focus:outline-none focus:ring-0 focus-visible:ring-0" />
+      </div>
       <div>
         <label className={cn('mb-1 block text-sm font-medium')}>
           대상 지점
         </label>
         <Select name="placeName">
-          <SelectTrigger>
+          <SelectTrigger className="focus:outline-none focus:ring-0 focus-visible:ring-0">
             <SelectValue placeholder="대상 지점을 선택해주세요" />
           </SelectTrigger>
-          <SelectContent className={cn('w-full bg-white')}>
+          <SelectContent className={cn('w-full bg-white outline-none')}>
             <SelectGroup id="placeName">
               {PLACES.map((v) => (
                 <SelectItem className={cn('w-full bg-white')} value={v} key={v}>
@@ -75,7 +87,7 @@ export default function Member() {
           </SelectContent>
         </Select>
       </div>
-      <div className="max-h-[600px] overflow-y-auto rounded-md border">
+      <div className="overflow-y-aut mt-6 max-h-[600px] rounded-md border">
         <Table>
           <TableHeader className="sticky top-0 z-10 bg-white">
             <TableRow>
@@ -156,16 +168,20 @@ export default function Member() {
           </TableBody>
         </Table>
         <Modal
-          setShow={setRoleModalShow}
+          setShow={(value) =>
+            setModalState((prev) => ({ ...prev, role: value }))
+          }
           type="role"
-          open={roleModalShow}
+          open={modalState.role}
           selected={selected}
         />
         <Modal
           type="status"
-          setShow={setStatusModalShow}
+          setShow={(value) =>
+            setModalState((prev) => ({ ...prev, status: value }))
+          }
           selected={selected}
-          open={statusModalShow}
+          open={modalState.status}
         />
       </div>
       <GoNotice />
