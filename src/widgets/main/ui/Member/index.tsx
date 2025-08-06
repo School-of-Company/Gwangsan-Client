@@ -30,9 +30,14 @@ import {
 } from '@/shared/components/ui/select';
 import { PLACES } from '@/shared/const/place';
 import { Input } from '@/shared/components/ui/input';
+import { storage } from '@/shared/lib/storage';
 
 export default function Member() {
-  const { data, isError, error } = useGetMembers();
+  const [filter, setFilter] = useState({ nickname: '', placeName: '' });
+  const { data, isError, error } = useGetMembers(
+    filter.nickname,
+    filter.placeName,
+  );
   const [modalState, setModalState] = useState({
     role: false,
     status: false,
@@ -56,6 +61,7 @@ export default function Member() {
     setModalState((prev) => ({ ...prev, role: true }));
     setSelectedMoreId(null);
   }, []);
+  const role = storage.getItem('role');
   return (
     <div className="w-full">
       <h2 className={cn('mb-[28px] mt-[96px] text-titleMedium2')}>회원목록</h2>
@@ -66,27 +72,45 @@ export default function Member() {
         <span className="text-muted-foreground absolute right-3 top-1/2 -translate-y-1/2">
           <SearchIcon />
         </span>
-        <Input className="mb-6 focus:outline-none focus:ring-0 focus-visible:ring-0" />
+        <Input
+          className="mb-6 focus:outline-none focus:ring-0 focus-visible:ring-0"
+          value={filter.nickname}
+          onChange={(e) =>
+            setFilter((prev) => ({ ...prev, nickname: e.target.value }))
+          }
+        />
       </div>
-      <div>
-        <label className={cn('mb-1 block text-sm font-medium')}>
-          대상 지점
-        </label>
-        <Select name="placeName">
-          <SelectTrigger className="focus:outline-none focus:ring-0 focus-visible:ring-0">
-            <SelectValue placeholder="대상 지점을 선택해주세요" />
-          </SelectTrigger>
-          <SelectContent className={cn('w-full bg-white outline-none')}>
-            <SelectGroup id="placeName">
-              {PLACES.map((v) => (
-                <SelectItem className={cn('w-full bg-white')} value={v} key={v}>
-                  {v}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      </div>
+      {role !== 'ROLE_PLACE_ADMIN' && (
+        <div>
+          <label className={cn('mb-1 block text-sm font-medium')}>
+            대상 지점
+          </label>
+          <Select
+            name="placeName"
+            value={filter.placeName}
+            onValueChange={(value) =>
+              setFilter((prev) => ({ ...prev, placeName: value }))
+            }
+          >
+            <SelectTrigger className="focus:outline-none focus:ring-0 focus-visible:ring-0">
+              <SelectValue placeholder="대상 지점을 선택해주세요" />
+            </SelectTrigger>
+            <SelectContent className={cn('w-full bg-white outline-none')}>
+              <SelectGroup id="placeName">
+                {PLACES.map((v) => (
+                  <SelectItem
+                    className={cn('w-full bg-white')}
+                    value={v}
+                    key={v}
+                  >
+                    {v}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
       <div className="overflow-y-aut mt-6 max-h-[600px] rounded-md border">
         <Table>
           <TableHeader className="sticky top-0 z-10 bg-white">
