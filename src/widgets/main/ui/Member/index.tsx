@@ -45,15 +45,14 @@ export default function Member() {
   if (isError)
     toast.error(error.message ?? '회원 목록을 가져오는데 실패했습니다');
 
-  const toggleMore = (id: string) => {
+  const toggleMore = useCallback((id: string) => {
     setSelectedMoreId((prev) => (prev === id ? null : id));
-  };
+  }, []);
 
   const handleChange = useCallback(() => {
     setRoleModalShow(true);
     setSelectedMoreId(null);
   }, []);
-
   return (
     <div className="w-full">
       <h2 className={cn('mb-[28px] mt-[96px] text-titleMedium2')}>회원목록</h2>
