@@ -116,7 +116,7 @@ export default function Member() {
           </Select>
         </div>
       )}
-      <div className="overflow-y-aut mt-6 max-h-[600px] rounded-md border">
+      <div className="overflow-y-auto mt-6 max-h-[600px] rounded-md border">
         <Table>
           <TableHeader className="sticky top-0 z-10 bg-white">
             <TableRow>
