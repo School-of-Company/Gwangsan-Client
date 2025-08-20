@@ -16,15 +16,32 @@ import { MEMBER_STATUS_KOR } from '@/shared/types/memberType';
 import { handleDate } from '@/shared/lib/handleDate';
 import { handleRoleName } from '@/views/detail/lib/handleRoleName';
 import { Button } from '@/shared/components/ui/button';
-import { useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import Modal from '@/entities/main/ui/Modal';
 import { toast } from 'sonner';
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, SearchIcon } from 'lucide-react';
+import {
+  SelectTrigger,
+  SelectValue,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+} from '@/shared/components/ui/select';
+import { PLACES } from '@/shared/const/place';
+import { Input } from '@/shared/components/ui/input';
+import { storage } from '@/shared/lib/storage';
 
 export default function Member() {
-  const { data, isError, error } = useGetMembers();
-  const [roleModalShow, setRoleModalShow] = useState(false);
-  const [statusModalShow, setStatusModalShow] = useState(false);
+  const [filter, setFilter] = useState({ nickname: '', placeName: '' });
+  const { data, isError, error } = useGetMembers(
+    filter.nickname,
+    filter.placeName,
+  );
+  const [modalState, setModalState] = useState({
+    role: false,
+    status: false,
+  });
   const [selected, setSelected] = useState({
     name: '',
     id: '',
@@ -32,19 +49,74 @@ export default function Member() {
     role: '',
   });
   const [selectedMoreId, setSelectedMoreId] = useState<string | null>(null);
+  const [role, setRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedRole = storage.getItem('role');
+    setRole(storedRole);
+  }, []);
 
   if (isError)
     toast.error(error.message ?? '회원 목록을 가져오는데 실패했습니다');
 
-  const toggleMore = (id: string) => {
+  const toggleMore = useCallback((id: string) => {
     setSelectedMoreId((prev) => (prev === id ? null : id));
-  };
+  }, []);
 
+  const handleChange = useCallback(() => {
+    setModalState((prev) => ({ ...prev, role: true }));
+    setSelectedMoreId(null);
+  }, []);
   return (
     <div className="w-full">
       <h2 className={cn('mb-[28px] mt-[96px] text-titleMedium2')}>회원목록</h2>
-
-      <div className="max-h-[600px] overflow-y-auto rounded-md border">
+      <label className={cn('mb-1 block text-sm font-medium')}>
+        닉네임 검색
+      </label>
+      <div className="relative">
+        <span className="text-muted-foreground absolute right-3 top-1/2 -translate-y-1/2">
+          <SearchIcon />
+        </span>
+        <Input
+          className="mb-6 focus:outline-none focus:ring-0 focus-visible:ring-0"
+          value={filter.nickname}
+          onChange={(e) =>
+            setFilter((prev) => ({ ...prev, nickname: e.target.value }))
+          }
+        />
+      </div>
+      {role !== null && role !== 'ROLE_PLACE_ADMIN' && (
+        <div>
+          <label className={cn('mb-1 block text-sm font-medium')}>
+            대상 지점
+          </label>
+          <Select
+            name="placeName"
+            value={filter.placeName}
+            onValueChange={(value) =>
+              setFilter((prev) => ({ ...prev, placeName: value }))
+            }
+          >
+            <SelectTrigger className="focus:outline-none focus:ring-0 focus-visible:ring-0">
+              <SelectValue placeholder="대상 지점을 선택해주세요" />
+            </SelectTrigger>
+            <SelectContent className={cn('w-full bg-white outline-none')}>
+              <SelectGroup id="placeName">
+                {PLACES.map((v) => (
+                  <SelectItem
+                    className={cn('w-full bg-white')}
+                    value={v}
+                    key={v}
+                  >
+                    {v}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
+      <div className="overflow-y-auto mt-6 max-h-[600px] rounded-md border">
         <Table>
           <TableHeader className="sticky top-0 z-10 bg-white">
             <TableRow>
@@ -102,10 +174,7 @@ export default function Member() {
                             <Button
                               variant="ghost"
                               className="w-full justify-start"
-                              onClick={() => {
-                                setStatusModalShow(true);
-                                setSelectedMoreId(null);
-                              }}
+                              onClick={handleChange}
                             >
                               상태 변경
                             </Button>
@@ -114,10 +183,7 @@ export default function Member() {
                             <Button
                               variant="ghost"
                               className="w-full justify-start"
-                              onClick={() => {
-                                setRoleModalShow(true);
-                                setSelectedMoreId(null);
-                              }}
+                              onClick={handleChange}
                             >
                               역할 변경
                             </Button>
@@ -131,16 +197,20 @@ export default function Member() {
           </TableBody>
         </Table>
         <Modal
-          setShow={setRoleModalShow}
+          setShow={(value) =>
+            setModalState((prev) => ({ ...prev, role: value }))
+          }
           type="role"
-          open={roleModalShow}
+          open={modalState.role}
           selected={selected}
         />
         <Modal
           type="status"
-          setShow={setStatusModalShow}
+          setShow={(value) =>
+            setModalState((prev) => ({ ...prev, status: value }))
+          }
           selected={selected}
-          open={statusModalShow}
+          open={modalState.status}
         />
       </div>
       <GoNotice />
