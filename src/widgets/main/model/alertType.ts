@@ -17,29 +17,7 @@ export const reportTypeOptions = Object.entries(REPORT_TYPE_KOR).map(
   }),
 );
 
-export type ALERT_TYPE = 'REPORT' | 'SIGN_UP' | 'TRADE_COMPLETE';
-
-export interface Trade {
-  nickname: string;
-  title: string;
-  placeName: Place;
-  createdAt: string;
-  product: {
-    id: number;
-    title: string;
-    content: string;
-    gwangsan: number;
-    type: 'OBJECT' | 'SERVICE';
-    mode: 'GIVER' | 'RECEIVER';
-    member: {
-      memberId: number;
-      nickname: string;
-      placeName: Place;
-      light: number;
-    };
-    images: ImageType[];
-  };
-}
+export type ALERT_TYPE = 'REPORT' | 'SIGN_UP';
 
 export interface SignUp {
   id: string;
