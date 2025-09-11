@@ -1,5 +1,4 @@
 import { PLACES } from '@/shared/const/place';
-import { MEMBER_ROLES } from '@/shared/const/role';
 import z from 'zod';
 
 export const NoticeSchema = z.object({
@@ -13,7 +12,6 @@ export const NoticeSchema = z.object({
     .max(1000, '최대 1000자까지만 입력 가능합니다.'),
   placeName: z.enum(PLACES).nullable(),
   imageIds: z.array(z.number().int().positive()),
-  role: z.enum(MEMBER_ROLES),
 });
 
 export type Notice = z.infer<typeof NoticeSchema>;
