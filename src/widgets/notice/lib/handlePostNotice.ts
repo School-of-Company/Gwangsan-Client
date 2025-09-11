@@ -1,5 +1,4 @@
 import { Place } from '@/shared/const/place';
-import { MemberRole } from '@/shared/const/role';
 import { NoticeSchema } from '../model/noticeSchema';
 import { postNotice } from '../api/postNotice';
 import { toast } from 'sonner';
@@ -14,7 +13,6 @@ export const handlePostNotice = async (formData: FormData) => {
     content: formData.get('content') as string,
     placeName: formData.get('placeName') as Place,
     imageIds,
-    role: formData.get('role') as MemberRole,
   };
 
   const result = NoticeSchema.safeParse(value);
