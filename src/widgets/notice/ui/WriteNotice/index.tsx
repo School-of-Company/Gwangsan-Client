@@ -14,20 +14,12 @@ import { Textarea } from '@/shared/components/ui/textarea';
 import { PLACES } from '@/shared/const/place';
 import { cn } from '@/shared/lib/utils';
 import { handlePostNotice } from '../../lib/handlePostNotice';
-import { storage } from '@/shared/lib/storage';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { uploadImage } from '../../api/uploadImage';
 
 export default function WriteNotice() {
-  const roleRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageIds, setImageIds] = useState<number[]>([]);
-
-  useEffect(() => {
-    if (roleRef.current) {
-      roleRef.current.value = storage.getItem('role') || '';
-    }
-  }, []);
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.currentTarget.files) {
@@ -124,7 +116,6 @@ export default function WriteNotice() {
             </Button>
           </div>
         </div>
-        <input ref={roleRef} type="hidden" name="role" />
         <Button
           type="submit"
           className={cn('mt-[45px] w-full')}
