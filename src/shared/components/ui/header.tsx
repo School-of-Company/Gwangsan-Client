@@ -17,6 +17,10 @@ export default function Header() {
     R.push('/');
   }, [R]);
 
+  const handleGraphClick = useCallback(() => {
+    R.push('/graph');
+  }, [R]);
+
   if (pathname === '/signin' || pathname.includes('/detail')) return;
   return (
     <header className="mt-[78px] flex items-center justify-between">
@@ -32,6 +36,9 @@ export default function Header() {
         </Button>
         <Button onClick={deleteAccount} variant="outline">
           회원탈퇴
+        </Button>
+        <Button onClick={handleGraphClick} variant="outline">
+          통계
         </Button>
       </div>
     </header>
