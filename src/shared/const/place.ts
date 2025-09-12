@@ -10,6 +10,7 @@ export const PLACES = [
   '평동',
   '월곡2',
   '하남',
+  '도시재생공동체센터',
 ] as const;
 
 export type Place = (typeof PLACES)[number];
