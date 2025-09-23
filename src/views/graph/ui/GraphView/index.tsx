@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Chart, ArcElement, Tooltip, Legend, PieController } from 'chart.js';
 import { headOptions } from '@/shared/const/place';
 import {
@@ -14,6 +14,8 @@ import { placeOptions } from '../../model/place';
 import { periodOptions } from '../../model/period';
 import { useGetHeadGraph } from '@/features/show-graph/model/useGetHeadGraph';
 import { useGetPlacegraph } from '@/features/show-graph/model/useGetPlaceGraph';
+import { Button } from '@/shared/components/ui/button';
+import { getExcel } from '@/features/show-graph/api/getExcel';
 
 Chart.register(PieController, ArcElement, Tooltip, Legend);
 
@@ -26,6 +28,9 @@ export default function GraphView() {
   const { data: headData } = useGetHeadGraph(period, head);
   const { data: placeData } = useGetPlacegraph(period, place);
 
+  const handleExcel = useCallback(() => {
+    getExcel(period, head);
+  }, [period, head]);
   useEffect(() => {
     if (!canvasRef.current) return;
 
@@ -136,6 +141,9 @@ export default function GraphView() {
             ))}
           </SelectContent>
         </Select>
+        <Button onClick={handleExcel} variant="outline">
+          엑셀출력
+        </Button>
       </div>
       <canvas ref={canvasRef} />
     </div>
