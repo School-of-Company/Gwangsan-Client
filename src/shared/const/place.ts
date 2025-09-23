@@ -14,6 +14,8 @@ export const PLACES = [
 
 export type Place = (typeof PLACES)[number];
 
+export type HeadType = keyof typeof HEAD;
+
 export const HEAD: Record<number, string> = {
   1: '광산구도시재생공동체센터',
   2: '광산구자원봉사센터',
