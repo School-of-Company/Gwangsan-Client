@@ -52,7 +52,7 @@ export default function WriteNotice() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     imageIds.forEach((id) => formData.append('imageIds', id.toString()));
-    await handlePostNotice(formData);
+    await handlePostNotice(formData, id);
     setImageIds([]);
   };
 
@@ -143,7 +143,7 @@ export default function WriteNotice() {
           className={cn('mt-[45px] w-full')}
           variant={'outline'}
         >
-          게시하기
+          {id ? '수정하기' : '게시하기'}
         </Button>
       </form>
     </div>
