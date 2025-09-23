@@ -16,10 +16,15 @@ import { cn } from '@/shared/lib/utils';
 import { handlePostNotice } from '../../lib/handlePostNotice';
 import { useState, useRef } from 'react';
 import { uploadImage } from '../../api/uploadImage';
+import { useSearchParams } from 'next/navigation';
+import { useGetDetailNotice } from '@/views/detail/model/useGetDetailNotice';
 
 export default function WriteNotice() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageIds, setImageIds] = useState<number[]>([]);
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
+  const { data } = useGetDetailNotice(id);
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.currentTarget.files) {
@@ -33,7 +38,7 @@ export default function WriteNotice() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     imageIds.forEach((id) => formData.append('imageIds', id.toString()));
-    await handlePostNotice(formData);
+    await handlePostNotice(formData, id);
     setImageIds([]);
   };
 
@@ -52,6 +57,7 @@ export default function WriteNotice() {
             제목
           </label>
           <Input
+            defaultValue={data?.title}
             id="title"
             name="title"
             type="text"
@@ -66,6 +72,7 @@ export default function WriteNotice() {
             내용
           </label>
           <Textarea
+            defaultValue={data?.content}
             id="content"
             name="content"
             placeholder="내용을 입력하세요"
@@ -75,7 +82,7 @@ export default function WriteNotice() {
           <label className={cn('mb-1 block text-sm font-medium')}>
             대상 지점
           </label>
-          <Select name="placeName">
+          <Select defaultValue={data?.place} name="placeName">
             <SelectTrigger>
               <SelectValue placeholder="대상 지점을 선택해주세요" />
             </SelectTrigger>
@@ -121,7 +128,7 @@ export default function WriteNotice() {
           className={cn('mt-[45px] w-full')}
           variant={'outline'}
         >
-          게시하기
+          {id ? '수정하기' : '게시하기'}
         </Button>
       </form>
     </div>

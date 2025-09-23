@@ -2,8 +2,12 @@ import { Place } from '@/shared/const/place';
 import { NoticeSchema } from '../model/noticeSchema';
 import { postNotice } from '../api/postNotice';
 import { toast } from 'sonner';
+import { editNotice } from '../api/editNotice';
 
-export const handlePostNotice = async (formData: FormData) => {
+export const handlePostNotice = async (
+  formData: FormData,
+  id: string | null,
+) => {
   const imageIdsRaw = formData.getAll('imageIds');
   const imageIds = imageIdsRaw
     .map((id) => Number(id))
@@ -17,18 +21,20 @@ export const handlePostNotice = async (formData: FormData) => {
 
   const result = NoticeSchema.safeParse(value);
   if (result.success) {
-    const res = await postNotice(value);
+    const res = id ? await editNotice(value, id) : await postNotice(value);
     if (res) {
-      if (res.status === 201) {
-        toast.success('공지가 작성되었습니다');
+      if (res.status === 201 || res.status === 200) {
+        toast.success(id ? '공지가 수정되었습니다' : '공지가 작성되었습니다');
         setTimeout(() => {
-          window.location.reload();
+          window.location.href = '/notice';
         }, 1000);
       } else {
         toast.error(
           res.status === 403
             ? '공지 작성 권한이 없는 지역입니다'
-            : '공지 작성 실패했습니다',
+            : id
+              ? '공지 수정에 실패하였습니다'
+              : '공지 등록에 실패하였습니다',
         );
       }
     }
