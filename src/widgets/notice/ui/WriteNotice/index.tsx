@@ -26,19 +26,6 @@ export default function WriteNotice() {
   const id = searchParams.get('id');
   const { data } = useGetDetailNotice(id);
 
-
-  useEffect(() => {
-    if (roleRef.current) {
-      roleRef.current.value = storage.getItem('role') || '';
-    }
-  }, []);
-
-  useEffect(() => {
-    if (data?.images && data.images.length > 0) {
-      setImageIds(data.images.map((img: { imageId: number }) => img.imageId));
-    }
-  }, [data?.images]);
-
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.currentTarget.files) {
       const files = Array.from(e.currentTarget.files);
