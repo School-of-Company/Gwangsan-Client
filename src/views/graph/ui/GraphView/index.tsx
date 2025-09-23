@@ -22,7 +22,7 @@ Chart.register(PieController, ArcElement, Tooltip, Legend);
 export default function GraphView() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const chartRef = useRef<Chart | null>(null);
-  const [period, setPeriod] = useState<string | undefined>();
+  const [period, setPeriod] = useState<string>('DAY');
   const [head, setHead] = useState<string>('1');
   const [place, setPlace] = useState<string | undefined>(undefined);
   const { data: headData } = useGetHeadGraph(period, head);
@@ -61,7 +61,7 @@ export default function GraphView() {
         labels,
         datasets: [
           {
-            label: '방문자 통계',
+            label: '거래 통계',
             data: values,
             backgroundColor: [
               'rgba(255, 99, 132, 0.6)',
@@ -85,7 +85,7 @@ export default function GraphView() {
         plugins: {
           legend: {
             display: true,
-            position: 'top',
+            position: 'bottom',
           },
           tooltip: {
             enabled: true,
