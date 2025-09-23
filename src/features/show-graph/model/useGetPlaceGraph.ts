@@ -5,10 +5,13 @@ interface Response {
   count: number;
 }
 
-export const useGetPlacegraph = (period: string, place: string) => {
+export const useGetPlacegraph = (
+  period: string | undefined,
+  place: string | undefined,
+) => {
   return useQuery<Response>({
-    queryKey: ['graph', place],
-    queryFn: () => getPlaceGraph(period, place),
+    queryKey: ['graph', place, period],
+    queryFn: () => getPlaceGraph(period, place!),
     enabled: Boolean(place),
   });
 };

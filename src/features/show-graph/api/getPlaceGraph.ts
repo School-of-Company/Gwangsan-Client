@@ -1,6 +1,9 @@
 import { instance } from '@/shared/lib/axios';
 
-export const getPlaceGraph = async (period: string, place: string) => {
+export const getPlaceGraph = async (
+  period: string | undefined,
+  place: string,
+) => {
   try {
     const res = await instance.get(
       `/trade/graph/place?period=${period}&place_id=${place}`,
