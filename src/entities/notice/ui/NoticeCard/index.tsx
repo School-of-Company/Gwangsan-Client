@@ -66,6 +66,7 @@ export default function NoticeCard({
             </Button>
           </AlertDialogTrigger>
           <AlertDialogContent
+            className="bg-white"
             onClick={(e: React.MouseEvent) => e.stopPropagation()}
           >
             <AlertDialogHeader>
