@@ -1,9 +1,9 @@
 import { instance } from '@/shared/lib/axios';
 
-export const getGraph = async (period: string, head: string) => {
+export const getHeadGraph = async (period: string, head: string) => {
   try {
     const res = await instance.get(
-      `/trade/graph?period=${period}&head_id=${head}`,
+      `/trade/graph/head?period=${period}&head_id=${head}`,
     );
     return res.data;
   } catch (error) {

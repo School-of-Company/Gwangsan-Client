@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getGraph } from '../api/getHeadGraph';
+import { getHeadGraph } from '../api/getHeadGraph';
 
 interface Response {
   place: {
@@ -9,10 +9,10 @@ interface Response {
   tradeCount: number;
 }
 
-export const useGetGraph = (period: string, head: string) => {
+export const useGetHeadGraph = (period: string, head: string) => {
   return useQuery<Response[]>({
     queryKey: ['graph'],
-    queryFn: () => getGraph(period, head),
+    queryFn: () => getHeadGraph(period, head),
     enabled: Boolean(head),
   });
 };
