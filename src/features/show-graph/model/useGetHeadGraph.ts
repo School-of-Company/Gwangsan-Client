@@ -11,7 +11,7 @@ interface Response {
 
 export const useGetHeadGraph = (period: string, head: string) => {
   return useQuery<Response[]>({
-    queryKey: ['graph'],
+    queryKey: ['graph', head],
     queryFn: () => getHeadGraph(period, head),
     enabled: Boolean(head),
   });
