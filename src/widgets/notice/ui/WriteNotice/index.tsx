@@ -14,19 +14,18 @@ import { Textarea } from '@/shared/components/ui/textarea';
 import { PLACES } from '@/shared/const/place';
 import { cn } from '@/shared/lib/utils';
 import { handlePostNotice } from '../../lib/handlePostNotice';
-import { storage } from '@/shared/lib/storage';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { uploadImage } from '../../api/uploadImage';
 import { useSearchParams } from 'next/navigation';
 import { useGetDetailNotice } from '@/views/detail/model/useGetDetailNotice';
 
 export default function WriteNotice() {
-  const roleRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageIds, setImageIds] = useState<number[]>([]);
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
   const { data } = useGetDetailNotice(id);
+
 
   useEffect(() => {
     if (roleRef.current) {
@@ -137,7 +136,6 @@ export default function WriteNotice() {
             </Button>
           </div>
         </div>
-        <input ref={roleRef} type="hidden" name="role" />
         <Button
           type="submit"
           className={cn('mt-[45px] w-full')}

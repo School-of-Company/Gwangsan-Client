@@ -13,11 +13,7 @@ export default function Notification() {
 
   const entire = useMemo(() => {
     if (!data) return [];
-    return [
-      ...(data.reports ?? []),
-      ...(data.signUps ?? []),
-      ...(data.trades ?? []),
-    ];
+    return [...(data.reports ?? []), ...(data.signUps ?? [])];
   }, [data]);
 
   return (
@@ -42,14 +38,6 @@ export default function Notification() {
                 key={v.memberId}
                 data={v}
                 type="SIGN_UP"
-              />
-            ))}
-            {data?.trades.map((v) => (
-              <NotificationCard
-                refetch={refetch}
-                key={v.product.id}
-                data={v}
-                type="TRADE"
               />
             ))}
           </>
