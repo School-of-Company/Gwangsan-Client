@@ -5,7 +5,7 @@ import { useGetDetailNotice } from '../../model/useGetDetailNotice';
 import { cn } from '@/shared/lib/utils';
 import { handleRoleName } from '../../lib/handleRoleName';
 import { MemberRole } from '@/shared/const/role';
-import { ArrowLeft, Trash2 } from 'lucide-react';
+import { ArrowLeft, Edit, Trash2 } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import { ImageSlider } from '@/entities/detail';
 import { handleDate } from '@/shared/lib/handleDate';
@@ -36,6 +36,10 @@ export default function DetailView() {
     R.back();
   }, [R]);
 
+  const handleEdit = useCallback(() => {
+    R.push('/notice?id=' + id);
+  }, [R, id]);
+
   const handleDelete = useCallback(() => {
     deletePost(String(id));
     setOpen(false);
@@ -60,15 +64,20 @@ export default function DetailView() {
           {data?.isMe && (
             <AlertDialog open={open} onOpenChange={setOpen}>
               <AlertDialogTrigger asChild>
-                <Button
-                  variant="outline"
-                  onClick={(e: React.MouseEvent) => {
-                    e.stopPropagation();
-                    setOpen(true);
-                  }}
-                >
-                  <Trash2 color="#DF454A" />
-                </Button>
+                <div>
+                  <Button
+                    variant="outline"
+                    onClick={(e: React.MouseEvent) => {
+                      e.stopPropagation();
+                      setOpen(true);
+                    }}
+                  >
+                    <Trash2 color="#DF454A" />
+                  </Button>
+                  <Button variant="outline" onClick={handleEdit}>
+                    <Edit />
+                  </Button>
+                </div>
               </AlertDialogTrigger>
               <AlertDialogContent
                 className="bg-white"
