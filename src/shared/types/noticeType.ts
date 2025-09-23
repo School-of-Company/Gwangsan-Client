@@ -7,11 +7,11 @@ export interface Notices {
   title: string;
   content: string;
   images?: ImageType[];
-  isMe: boolean;
 }
 
 export interface DetailNotice extends Notices {
   place: Place;
   createdAt: string;
   role: MemberRole;
+  isMe: boolean;
 }
