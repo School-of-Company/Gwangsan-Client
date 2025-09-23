@@ -19,6 +19,21 @@ import { getExcel } from '@/features/show-graph/api/getExcel';
 
 Chart.register(PieController, ArcElement, Tooltip, Legend);
 
+// 차트와 하단 legend 사이 여백을 강제로 확보하는 플러그인
+const legendMarginPlugin = {
+  id: 'legendMargin',
+  beforeInit(chart: any, _args: any, pluginOptions: { margin?: number }) {
+    const fit = chart.legend && chart.legend.fit;
+    if (!fit) return;
+    chart.legend.fit = function fitWithMargin() {
+      fit.bind(chart.legend)();
+      // legend 높이에 margin을 추가해 그래프와의 간격을 벌림
+      // pluginOptions.margin이 없으면 기본 24px
+      this.height += pluginOptions?.margin ?? 24;
+    };
+  },
+};
+
 export default function GraphView() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const chartRef = useRef<Chart | null>(null);
@@ -79,6 +94,7 @@ export default function GraphView() {
           },
         ],
       },
+      plugins: [legendMarginPlugin],
       options: {
         responsive: true,
         maintainAspectRatio: false,
@@ -86,6 +102,9 @@ export default function GraphView() {
           legend: {
             display: true,
             position: 'bottom',
+            labels: {
+              padding: 16,
+            },
           },
           tooltip: {
             enabled: true,
@@ -97,14 +116,16 @@ export default function GraphView() {
     });
 
     return () => {
-      chartRef.current?.destroy();
+      if (chartRef.current !== null) {
+        chartRef.current.destroy();
+      }
       chartRef.current = null;
     };
   }, [headData, placeData, place]);
 
   return (
-    <div style={{ width: '100%', height: 360 }}>
-      <div className="flex gap-6 p-6">
+    <div className="flex h-screen w-full flex-col items-center">
+      <div className="mb-10 flex w-full gap-6 p-6">
         <Select value={period} onValueChange={(e) => setPeriod(e)}>
           <SelectTrigger>
             <SelectValue placeholder="기간을 선택하세요" />
@@ -145,7 +166,9 @@ export default function GraphView() {
           엑셀출력
         </Button>
       </div>
-      <canvas ref={canvasRef} />
+      <div className="h-2/3">
+        <canvas ref={canvasRef} />
+      </div>
     </div>
   );
 }
