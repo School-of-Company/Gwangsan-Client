@@ -28,7 +28,7 @@ export const handlePostNotice = async (
       if (res.status === 201 || res.status === 200) {
         toast.success(id ? '공지가 수정되었습니다' : '공지가 작성되었습니다');
         setTimeout(() => {
-          window.location.reload();
+          window.location.href = '/notice';
         }, 1000);
       } else {
         toast.error(
