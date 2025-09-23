@@ -36,6 +36,10 @@ export default function DetailView() {
     R.back();
   }, [R]);
 
+  const handleModalOpen = useCallback(() => {
+    setOpen(true);
+  }, []);
+
   const handleEdit = useCallback(() => {
     R.push('/notice?id=' + id);
   }, [R, id]);
@@ -57,48 +61,46 @@ export default function DetailView() {
             <span className={cn('text-body1')}>뒤로가기</span>
           </div>
           <h1 className={cn('mb-4 text-titleLarge')}>{data?.title}</h1>
-          <div className={cn('flex gap-[42px] text-body2 text-gray-600')}>
-            <small>{handleRoleName(data?.role as MemberRole)}</small>
-            <small>{handleDate(data?.createdAt)}</small>
+          <div className="flex justify-between">
+            <div className={cn('flex gap-[42px] text-body2 text-gray-600')}>
+              <small>{handleRoleName(data?.role as MemberRole)}</small>
+              <small>{handleDate(data?.createdAt)}</small>
+            </div>
+            <div className="flex gap-3">
+              <Button variant="outline" onClick={handleEdit}>
+                <Edit />
+              </Button>
+              <Button variant="outline" onClick={handleModalOpen}>
+                <Trash2 color="#DF454A" />
+              </Button>
+            </div>
           </div>
-          {data?.isMe && (
-            <AlertDialog open={open} onOpenChange={setOpen}>
-              <AlertDialogTrigger asChild>
-                <div>
-                  <Button
-                    variant="outline"
-                    onClick={(e: React.MouseEvent) => {
-                      e.stopPropagation();
-                      setOpen(true);
-                    }}
-                  >
-                    <Trash2 color="#DF454A" />
-                  </Button>
-                  <Button variant="outline" onClick={handleEdit}>
-                    <Edit />
-                  </Button>
-                </div>
-              </AlertDialogTrigger>
-              <AlertDialogContent
-                className="bg-white"
-                onClick={(e: React.MouseEvent) => e.stopPropagation()}
-              >
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    정말 삭제하시겠습니까?
-                  </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    이 공지는 삭제 후 되돌릴 수 없습니다.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>취소</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDelete}>
-                    삭제
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+          {(data?.isMe || true) && (
+            <div className={cn('mt-4 flex gap-2')}>
+              <AlertDialog open={open} onOpenChange={setOpen}>
+                <AlertDialogTrigger asChild></AlertDialogTrigger>
+                <AlertDialogContent
+                  className="bg-white"
+                  onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                >
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      정말 삭제하시겠습니까?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      이 공지는 삭제 후 되돌릴 수
+                      없습니다.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>취소</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDelete}>
+                      삭제
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
           )}
         </div>
         {data?.images && <ImageSlider images={data?.images} />}
