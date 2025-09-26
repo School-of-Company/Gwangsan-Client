@@ -10,7 +10,9 @@ export function middleware(request: NextRequest) {
   if (authConfig.protectedPages.includes(currentPath)) {
     if (role === 'ROLE_ADMIN') {
     } else {
-      return NextResponse.redirect(new URL('/', request.url));
+      request.cookies.delete('accessToken');
+      request.cookies.delete('refreshToken');
+      return NextResponse.redirect(new URL('/signin', request.url));
     }
   }
 
