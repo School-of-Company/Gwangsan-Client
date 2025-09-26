@@ -5,6 +5,14 @@ import { authConfig } from '@/shared/config/auth';
 export function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
   const currentPath = request.nextUrl.pathname;
+  const role = request.cookies.get('role')?.value;
+
+  if (authConfig.protectedPages.includes(currentPath)) {
+    if (role === 'ROLE_ADMIN') {
+    } else {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+  }
 
   if (currentPath.startsWith('/api')) {
     requestHeaders.set('x-custom-header', 'api-request');
