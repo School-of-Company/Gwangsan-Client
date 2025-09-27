@@ -63,8 +63,13 @@ export default function Member() {
     setSelectedMoreId((prev) => (prev === id ? null : id));
   }, []);
 
-  const handleChange = useCallback(() => {
+  const openRoleModal = useCallback(() => {
     setModalState((prev) => ({ ...prev, role: true }));
+    setSelectedMoreId(null);
+  }, []);
+
+  const openStatusModal = useCallback(() => {
+    setModalState((prev) => ({ ...prev, status: true }));
     setSelectedMoreId(null);
   }, []);
   return (
@@ -116,7 +121,7 @@ export default function Member() {
           </Select>
         </div>
       )}
-      <div className="overflow-y-auto mt-6 max-h-[600px] rounded-md border">
+      <div className="mt-6 max-h-[600px] overflow-y-auto rounded-md border">
         <Table>
           <TableHeader className="sticky top-0 z-10 bg-white">
             <TableRow>
@@ -174,7 +179,7 @@ export default function Member() {
                             <Button
                               variant="ghost"
                               className="w-full justify-start"
-                              onClick={handleChange}
+                              onClick={openStatusModal}
                             >
                               상태 변경
                             </Button>
@@ -183,7 +188,7 @@ export default function Member() {
                             <Button
                               variant="ghost"
                               className="w-full justify-start"
-                              onClick={handleChange}
+                              onClick={openRoleModal}
                             >
                               역할 변경
                             </Button>
