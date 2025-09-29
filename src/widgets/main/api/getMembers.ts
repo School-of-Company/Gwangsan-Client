@@ -7,8 +7,8 @@ export const getMembers = async (
   try {
     const res = await instance.get('/member/all', {
       params: {
-        nickname,
-        placeName,
+        ...(nickname ? { nickname } : {}),
+        ...(placeName ? { placeName } : {}),
       },
     });
     return res.data;
