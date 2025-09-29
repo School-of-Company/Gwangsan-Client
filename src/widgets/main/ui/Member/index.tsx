@@ -73,7 +73,7 @@ export default function Member() {
     setSelectedMoreId(null);
   }, []);
   return (
-    <div className="w-full">
+    <div className="min-h-28 w-full">
       <h2 className={cn('mb-[28px] mt-[96px] text-titleMedium2')}>회원목록</h2>
       <label className={cn('mb-1 block text-sm font-medium')}>
         닉네임 검색
@@ -174,7 +174,7 @@ export default function Member() {
                         className="text-muted-foreground h-4 w-4 cursor-pointer"
                       />
                       {selectedMoreId === member.memberId && (
-                        <ul className="absolute right-0 z-10 mt-2 w-32 rounded-md border bg-white shadow-md">
+                        <ul className="absolute right-0 z-50 mt-2 w-32 rounded-md border bg-white shadow-md">
                           <li>
                             <Button
                               variant="ghost"
