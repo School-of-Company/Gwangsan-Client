@@ -28,6 +28,12 @@ interface DialogProps {
 }
 
 export default function Modal({ open, setShow, type, selected }: DialogProps) {
+  const options = type === 'role' ? memberRoleOptions : memberStatusOptions;
+  const rawValue = type === 'role' ? selected.role : selected.status;
+  const selectValue = options.some((o) => o.value === rawValue)
+    ? rawValue
+    : undefined;
+
   const { mutate: changeStatus } = useChangeStatus();
   const { mutate: changeRole } = useChangeRole();
   return (
@@ -43,35 +49,31 @@ export default function Modal({ open, setShow, type, selected }: DialogProps) {
         </DialogHeader>
 
         <div className="space-y-2">
-          <Label>{type === 'role' ? '역할' : '상태'}</Label>
+          <Label htmlFor="modal-select">
+            {type === 'role' ? '역할' : '상태'}
+          </Label>
           <Select
-            value={type === 'role' ? selected.role : selected.status}
+            value={selectValue}
             onValueChange={(e) => {
               if (type === 'role') {
-                changeRole({ id: String(selected.id), role: e as MemberRole });
+                changeRole({ id: selected.id, role: e as MemberRole });
               } else {
                 changeStatus({ id: selected.id, status: e as MEMBER_STATUS });
               }
               setShow(false);
             }}
           >
-            <SelectTrigger>
+            <SelectTrigger id="modal-select">
               <SelectValue
                 placeholder={`${type === 'role' ? '역할을' : '상태를'} 선택하세요`}
               />
             </SelectTrigger>
             <SelectContent className="bg-white">
-              {type === 'role'
-                ? memberRoleOptions.map((r) => (
-                    <SelectItem key={r.value} value={r.value}>
-                      {r.label}
-                    </SelectItem>
-                  ))
-                : memberStatusOptions.map((r) => (
-                    <SelectItem key={r.value} value={r.value}>
-                      {r.label}
-                    </SelectItem>
-                  ))}
+              {options.map((r) => (
+                <SelectItem key={r.value} value={r.value}>
+                  {r.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

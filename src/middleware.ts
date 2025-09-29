@@ -8,7 +8,7 @@ export function middleware(request: NextRequest) {
   const role = request.cookies.get('role')?.value;
 
   if (authConfig.protectedPages.includes(currentPath)) {
-    if (role === 'ROLE_ADMIN') {
+    if (role === 'ROLE_HEAD_ADMIN' || role === 'ROLE_PLACE_ADMIN') {
     } else {
       request.cookies.delete('accessToken');
       request.cookies.delete('refreshToken');
