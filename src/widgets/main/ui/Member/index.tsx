@@ -107,8 +107,11 @@ export default function Member() {
     setSelectedMoreId(null);
   }, []);
   return (
-    <div className="min-h-28 w-full">
-      <h2 className={cn('mb-[28px] mt-[96px] text-titleMedium2')}>회원목록</h2>
+    <div className="mb-[24px] mt-[96px] min-h-28 w-full">
+      <header className="mb-6 flex items-center justify-between">
+        <h2 className={cn(' text-titleMedium2')}>회원목록</h2>
+        <Button variant="outline">초기화</Button>
+      </header>
       <label className={cn('mb-1 block text-sm font-medium')}>
         닉네임 검색
       </label>
