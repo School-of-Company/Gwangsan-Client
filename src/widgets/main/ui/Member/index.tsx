@@ -84,15 +84,11 @@ export default function Member() {
   if (isError)
     toast.error(error.message ?? '회원 목록을 가져오는데 실패했습니다');
 
-  const toggleMore = useCallback((id: string) => {
-    setSelectedMoreId((prev) => (prev === id ? null : id));
-  }, []);
-
   const openMenuAt = useCallback((id: string, el: HTMLElement | null) => {
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    const top = rect.bottom + 8; // 8px gap
-    const left = rect.right - 128; // align right with width 128px
+    const top = rect.bottom + 8;
+    const left = rect.right - 128;
     setSelectedMoreId(id);
     setMenuPos({ x: Math.max(8, left), y: Math.max(8, top) });
   }, []);
@@ -106,9 +102,18 @@ export default function Member() {
     setModalState((prev) => ({ ...prev, status: true }));
     setSelectedMoreId(null);
   }, []);
+
+  const initValue = useCallback(() => {
+    setFilter({ nickname: '', placeName: '' });
+  }, []);
   return (
-    <div className="min-h-28 w-full">
-      <h2 className={cn('mb-[28px] mt-[96px] text-titleMedium2')}>회원목록</h2>
+    <div className="mb-[24px] mt-[96px] min-h-28 w-full">
+      <header className="mb-6 flex items-center justify-between">
+        <h2 className={cn(' text-titleMedium2')}>회원목록</h2>
+        <Button onClick={initValue} variant="outline">
+          초기화
+        </Button>
+      </header>
       <label className={cn('mb-1 block text-sm font-medium')}>
         닉네임 검색
       </label>
@@ -196,9 +201,6 @@ export default function Member() {
                   <TableCell className="text-right">
                     <div className="inline-block">
                       <span
-                        ref={(el) => {
-                          // store last anchor element for outside click handling if needed
-                        }}
                         onClick={(e) => {
                           setSelected({
                             name: member.name,
