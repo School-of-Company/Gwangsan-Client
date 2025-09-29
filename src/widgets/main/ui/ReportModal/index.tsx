@@ -21,6 +21,7 @@ import { changeStatus } from '@/shared/api/changeStatus';
 import { toast } from 'sonner';
 import { deleteNotification } from '@/shared/api/deleteNotification';
 import { refuseNotifications } from '../../api/refuseNotification';
+import Image from 'next/image';
 
 interface ReportModalProps {
   open: boolean;
@@ -43,6 +44,7 @@ export default function ReportModal({
   content,
   reportType,
   memberId,
+  images,
   refetch,
   notificationId,
 }: ReportModalProps) {
@@ -87,6 +89,18 @@ export default function ReportModal({
           </div>
 
           <div>
+            <div className="flex gap-2 overflow-x-auto">
+              {images.map((v) => (
+                <Image
+                  src={v.imageUrl}
+                  alt={v.imageUrl}
+                  key={v.imageId}
+                  width={120}
+                  height={120}
+                  className="flex-shrink-0 rounded-md object-cover"
+                />
+              ))}
+            </div>
             <small>신고 내용</small>
             <p className="whitespace-pre-wrap">{content}</p>
           </div>

@@ -111,7 +111,7 @@ export const useSignIn = () => {
       );
       if (firstErrorField) {
         toast.error(
-          `${firstErrorField === 'nickname' ? '아이디' : '비밀번호'}를 확인해주세요.`,
+          `${firstErrorField === 'nickname' ? '별칭을' : '비밀번호를'} 확인해주세요.`,
         );
       }
       return;

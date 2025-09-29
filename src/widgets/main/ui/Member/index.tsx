@@ -17,6 +17,8 @@ import { handleDate } from '@/shared/lib/handleDate';
 import { handleRoleName } from '@/views/detail/lib/handleRoleName';
 import { Button } from '@/shared/components/ui/button';
 import { useCallback, useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { useRef } from 'react';
 import Modal from '@/entities/main/ui/Modal';
 import { toast } from 'sonner';
 import { MoreHorizontal, SearchIcon } from 'lucide-react';
@@ -33,6 +35,7 @@ import { Input } from '@/shared/components/ui/input';
 import { storage } from '@/shared/lib/storage';
 
 export default function Member() {
+  const menuContainerRef = useRef<HTMLDivElement | null>(null);
   const [filter, setFilter] = useState({ nickname: '', placeName: '' });
   const { data, isError, error } = useGetMembers(
     filter.nickname,
@@ -49,12 +52,34 @@ export default function Member() {
     role: '',
   });
   const [selectedMoreId, setSelectedMoreId] = useState<string | null>(null);
+  const [menuPos, setMenuPos] = useState<{ x: number; y: number } | null>(null);
   const [role, setRole] = useState<string | null>(null);
 
   useEffect(() => {
     const storedRole = storage.getItem('role');
     setRole(storedRole);
   }, []);
+
+  useEffect(() => {
+    if (!selectedMoreId) return;
+    const handle = () => setSelectedMoreId(null);
+    window.addEventListener('scroll', handle, true);
+    window.addEventListener('resize', handle);
+    const clickListener = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (
+        menuContainerRef.current &&
+        !menuContainerRef.current.contains(target)
+      ) {
+        setSelectedMoreId(null);
+      }
+    };
+    document.addEventListener('click', clickListener, { once: true });
+    return () => {
+      window.removeEventListener('scroll', handle, true);
+      window.removeEventListener('resize', handle);
+    };
+  }, [selectedMoreId]);
 
   if (isError)
     toast.error(error.message ?? '회원 목록을 가져오는데 실패했습니다');
@@ -63,12 +88,26 @@ export default function Member() {
     setSelectedMoreId((prev) => (prev === id ? null : id));
   }, []);
 
-  const handleChange = useCallback(() => {
+  const openMenuAt = useCallback((id: string, el: HTMLElement | null) => {
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const top = rect.bottom + 8; // 8px gap
+    const left = rect.right - 128; // align right with width 128px
+    setSelectedMoreId(id);
+    setMenuPos({ x: Math.max(8, left), y: Math.max(8, top) });
+  }, []);
+
+  const openRoleModal = useCallback(() => {
     setModalState((prev) => ({ ...prev, role: true }));
     setSelectedMoreId(null);
   }, []);
+
+  const openStatusModal = useCallback(() => {
+    setModalState((prev) => ({ ...prev, status: true }));
+    setSelectedMoreId(null);
+  }, []);
   return (
-    <div className="w-full">
+    <div className="min-h-28 w-full">
       <h2 className={cn('mb-[28px] mt-[96px] text-titleMedium2')}>회원목록</h2>
       <label className={cn('mb-1 block text-sm font-medium')}>
         닉네임 검색
@@ -116,7 +155,7 @@ export default function Member() {
           </Select>
         </div>
       )}
-      <div className="overflow-y-auto mt-6 max-h-[600px] rounded-md border">
+      <div className="mt-6 max-h-[600px] overflow-y-auto rounded-md border">
         <Table>
           <TableHeader className="sticky top-0 z-10 bg-white">
             <TableRow>
@@ -155,47 +194,76 @@ export default function Member() {
                   </TableCell>
                   <TableCell>{handleDate(member.joinedAt)}</TableCell>
                   <TableCell className="text-right">
-                    <div className="relative inline-block">
-                      <MoreHorizontal
-                        onClick={() => {
+                    <div className="inline-block">
+                      <span
+                        ref={(el) => {
+                          // store last anchor element for outside click handling if needed
+                        }}
+                        onClick={(e) => {
                           setSelected({
                             name: member.name,
                             id: member.memberId,
                             status: member.status,
                             role: member.role,
                           });
-                          toggleMore(member.memberId);
+                          openMenuAt(
+                            member.memberId,
+                            e.currentTarget as HTMLElement,
+                          );
                         }}
-                        className="text-muted-foreground h-4 w-4 cursor-pointer"
-                      />
-                      {selectedMoreId === member.memberId && (
-                        <ul className="absolute right-0 z-10 mt-2 w-32 rounded-md border bg-white shadow-md">
-                          <li>
-                            <Button
-                              variant="ghost"
-                              className="w-full justify-start"
-                              onClick={handleChange}
-                            >
-                              상태 변경
-                            </Button>
-                          </li>
-                          <li>
-                            <Button
-                              variant="ghost"
-                              className="w-full justify-start"
-                              onClick={handleChange}
-                            >
-                              역할 변경
-                            </Button>
-                          </li>
-                        </ul>
-                      )}
+                        className="inline-flex"
+                      >
+                        <MoreHorizontal className="text-muted-foreground h-4 w-4 cursor-pointer" />
+                      </span>
                     </div>
                   </TableCell>
                 </TableRow>
               ))}
           </TableBody>
         </Table>
+        {selectedMoreId &&
+          menuPos &&
+          createPortal(
+            <div
+              ref={menuContainerRef}
+              style={{
+                position: 'fixed',
+                top: menuPos.y,
+                left: menuPos.x,
+                zIndex: 9999,
+                width: 128,
+              }}
+              className="rounded-md border bg-white shadow-md"
+            >
+              <ul className="w-32">
+                <li>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start"
+                    onClick={() => {
+                      openStatusModal();
+                      setSelectedMoreId(null);
+                    }}
+                  >
+                    상태 변경
+                  </Button>
+                </li>
+                <li>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start"
+                    onClick={() => {
+                      openRoleModal();
+                      setSelectedMoreId(null);
+                    }}
+                  >
+                    역할 변경
+                  </Button>
+                </li>
+              </ul>
+            </div>,
+            document.body,
+          )}
         <Modal
           setShow={(value) =>
             setModalState((prev) => ({ ...prev, role: value }))

@@ -31,14 +31,14 @@ export const SignInForm = () => {
               htmlFor="nickname"
               className="mb-1 block text-sm font-medium"
             >
-              아이디
+              별칭
             </label>
             <Input
               id="nickname"
               name="nickname"
               value={formData.nickname}
               onChange={handleChange}
-              placeholder="아이디를 입력하세요"
+              placeholder="별칭을 입력하세요"
               className={errors.nickname ? 'border-red-500' : ''}
             />
             <div className="mt-1 h-4">
