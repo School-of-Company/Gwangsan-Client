@@ -19,7 +19,6 @@ import { Button } from '@/shared/components/ui/button';
 import { useCallback, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useRef } from 'react';
-import Modal from '@/entities/main/ui/Modal';
 import { toast } from 'sonner';
 import { MoreHorizontal, SearchIcon } from 'lucide-react';
 import {
@@ -33,6 +32,7 @@ import {
 import { PLACES } from '@/shared/const/place';
 import { Input } from '@/shared/components/ui/input';
 import { storage } from '@/shared/lib/storage';
+import { RoleModal, StatusModal } from '@/entities/main/ui/Modal';
 
 export default function Member() {
   const menuContainerRef = useRef<HTMLDivElement | null>(null);
@@ -266,16 +266,14 @@ export default function Member() {
             </div>,
             document.body,
           )}
-        <Modal
+        <RoleModal
           setShow={(value) =>
             setModalState((prev) => ({ ...prev, role: value }))
           }
-          type="role"
           open={modalState.role}
           selected={selected}
         />
-        <Modal
-          type="status"
+        <StatusModal
           setShow={(value) =>
             setModalState((prev) => ({ ...prev, status: value }))
           }
