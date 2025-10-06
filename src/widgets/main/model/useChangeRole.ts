@@ -8,9 +8,16 @@ export const useChangeRole = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, role }: { id: string; role: MemberRole }) =>
-      changeRole(id, role),
-    onMutate: async ({ id, role }) => {
+    mutationFn: ({
+      id,
+      role,
+      place,
+    }: {
+      id: string;
+      role: MemberRole;
+      place: number;
+    }) => changeRole(id, role, place),
+    onMutate: async ({ id, role, place }) => {
       await queryClient.cancelQueries({ queryKey: ['members'] });
 
       const previousMembers = queryClient.getQueryData<MemberType[]>([
@@ -19,7 +26,7 @@ export const useChangeRole = () => {
 
       queryClient.setQueryData<MemberType[]>(['members'], (old = []) =>
         old.map((member) =>
-          member.memberId === id ? { ...member, role } : member,
+          member.memberId === id ? { ...member, role, place } : member,
         ),
       );
 
