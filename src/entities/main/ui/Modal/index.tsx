@@ -98,9 +98,6 @@ export function RoleModal({
                 <SelectValue placeholder="지점 또는 본점을 선택하세요" />
               </SelectTrigger>
               <SelectContent className="bg-white">
-                <SelectItem key="all" value="all">
-                  ALL
-                </SelectItem>
                 {allPlaceOptions.map((r) => (
                   <SelectItem key={r.value} value={r.value}>
                     {r.label}
