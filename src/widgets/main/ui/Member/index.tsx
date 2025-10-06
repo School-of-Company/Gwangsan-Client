@@ -45,11 +45,18 @@ export default function Member() {
     role: false,
     status: false,
   });
-  const [selected, setSelected] = useState({
+  const [selected, setSelected] = useState<{
+    name: string;
+    id: string;
+    status: string;
+    role: string;
+    place: string | number;
+  }>({
     name: '',
     id: '',
     status: '',
     role: '',
+    place: '',
   });
   const [selectedMoreId, setSelectedMoreId] = useState<string | null>(null);
   const [menuPos, setMenuPos] = useState<{ x: number; y: number } | null>(null);
@@ -207,6 +214,7 @@ export default function Member() {
                             id: member.memberId,
                             status: member.status,
                             role: member.role,
+                            place: selected.place,
                           });
                           openMenuAt(
                             member.memberId,
@@ -272,8 +280,10 @@ export default function Member() {
           }
           open={modalState.role}
           selected={selected}
+          setValue={setSelected}
         />
         <StatusModal
+          setValue={setSelected}
           setShow={(value) =>
             setModalState((prev) => ({ ...prev, status: value }))
           }
