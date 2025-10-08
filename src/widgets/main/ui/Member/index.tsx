@@ -31,7 +31,7 @@ import {
 import { PLACES } from '@/shared/const/place';
 import { Input } from '@/shared/components/ui/input';
 import { storage } from '@/shared/lib/storage';
-import { RoleModal, StatusModal } from '@/entities/main/ui/Modal';
+import { RoleModal, StatusModal } from '@/widgets/main/ui/Modal';
 
 export default function Member() {
   const [filter, setFilter] = useState({ nickname: '', placeName: '' });
@@ -48,13 +48,13 @@ export default function Member() {
     id: string;
     status: string;
     role: string;
-    place: string | number;
+    place: number;
   }>({
     name: '',
     id: '',
     status: '',
     role: '',
-    place: '',
+    place: 0,
   });
   const [selectedMoreId, setSelectedMoreId] = useState<string | null>(null);
   const [menuPos, setMenuPos] = useState<{ x: number; y: number } | null>(null);

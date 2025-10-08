@@ -32,7 +32,7 @@ interface BaseDialogProps {
       id: string;
       status: string;
       role: string;
-      place: string | number;
+      place: number;
     }>
   >;
   selected: {
@@ -40,7 +40,7 @@ interface BaseDialogProps {
     id: string;
     status: string;
     role: string;
-    place: string | number;
+    place: number;
   };
 }
 
@@ -92,7 +92,7 @@ export function RoleModal({
             <Select
               value={selected.place ? String(selected.place) : undefined}
               onValueChange={(e) => {
-                setValue((prev) => ({ ...prev, place: e }));
+                setValue((prev) => ({ ...prev, place: Number(e) }));
               }}
             >
               <SelectTrigger id="place-modal-select">
