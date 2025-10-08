@@ -21,6 +21,7 @@ import { useChangeStatus } from '@/shared/model/useChangeStatus';
 import { useChangeRole } from '@/widgets/main/model/useChangeRole';
 import { allPlaceOptions } from '@/shared/const/place';
 import { Dispatch, SetStateAction } from 'react';
+import { Button } from '@/shared/components/ui/button';
 
 interface BaseDialogProps {
   open: boolean;
@@ -109,14 +110,8 @@ export function RoleModal({
         )}
 
         <div className="flex justify-end gap-2 pt-4">
-          <button
-            className="rounded-md bg-gray-200 px-4 py-2 text-sm hover:bg-gray-300"
-            onClick={() => setShow(false)}
-          >
-            취소
-          </button>
-          <button
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
+          <Button onClick={() => setShow(false)}>취소</Button>
+          <Button
             onClick={() => {
               if (selectValue) {
                 changeRole({
@@ -129,7 +124,7 @@ export function RoleModal({
             }}
           >
             확인
-          </button>
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
