@@ -5,7 +5,7 @@ export default function MainView() {
   return (
     <div
       className={cn(
-        'flex h-screen w-full flex-col overflow-y-auto md:flex-row',
+        'flex h-screen w-full flex-col overflow-y-scroll md:flex-row',
       )}
     >
       <Notification />

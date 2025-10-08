@@ -18,8 +18,6 @@ import { handleRoleName } from '@/views/detail/lib/handleRoleName';
 import { Button } from '@/shared/components/ui/button';
 import { useCallback, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { useRef } from 'react';
-import Modal from '@/entities/main/ui/Modal';
 import { toast } from 'sonner';
 import { MoreHorizontal, SearchIcon } from 'lucide-react';
 import {
@@ -33,9 +31,9 @@ import {
 import { PLACES } from '@/shared/const/place';
 import { Input } from '@/shared/components/ui/input';
 import { storage } from '@/shared/lib/storage';
+import { RoleModal, StatusModal } from '@/widgets/main/ui/Modal';
 
 export default function Member() {
-  const menuContainerRef = useRef<HTMLDivElement | null>(null);
   const [filter, setFilter] = useState({ nickname: '', placeName: '' });
   const { data, isError, error } = useGetMembers(
     filter.nickname,
@@ -45,11 +43,18 @@ export default function Member() {
     role: false,
     status: false,
   });
-  const [selected, setSelected] = useState({
+  const [selected, setSelected] = useState<{
+    name: string;
+    id: string;
+    status: string;
+    role: string;
+    place: number;
+  }>({
     name: '',
     id: '',
     status: '',
     role: '',
+    place: 0,
   });
   const [selectedMoreId, setSelectedMoreId] = useState<string | null>(null);
   const [menuPos, setMenuPos] = useState<{ x: number; y: number } | null>(null);
@@ -59,27 +64,6 @@ export default function Member() {
     const storedRole = storage.getItem('role');
     setRole(storedRole);
   }, []);
-
-  useEffect(() => {
-    if (!selectedMoreId) return;
-    const handle = () => setSelectedMoreId(null);
-    window.addEventListener('scroll', handle, true);
-    window.addEventListener('resize', handle);
-    const clickListener = (e: MouseEvent) => {
-      const target = e.target as Node;
-      if (
-        menuContainerRef.current &&
-        !menuContainerRef.current.contains(target)
-      ) {
-        setSelectedMoreId(null);
-      }
-    };
-    document.addEventListener('click', clickListener, { once: true });
-    return () => {
-      window.removeEventListener('scroll', handle, true);
-      window.removeEventListener('resize', handle);
-    };
-  }, [selectedMoreId]);
 
   if (isError)
     toast.error(error.message ?? '회원 목록을 가져오는데 실패했습니다');
@@ -107,7 +91,7 @@ export default function Member() {
     setFilter({ nickname: '', placeName: '' });
   }, []);
   return (
-    <div className="mb-[24px] mt-[96px] min-h-28 w-full">
+    <div className="mb-[24px] mt-[96px] h-full min-h-28 w-full overflow-scroll">
       <header className="mb-6 flex items-center justify-between">
         <h2 className={cn(' text-titleMedium2')}>회원목록</h2>
         <Button onClick={initValue} variant="outline">
@@ -207,6 +191,7 @@ export default function Member() {
                             id: member.memberId,
                             status: member.status,
                             role: member.role,
+                            place: selected.place,
                           });
                           openMenuAt(
                             member.memberId,
@@ -227,7 +212,6 @@ export default function Member() {
           menuPos &&
           createPortal(
             <div
-              ref={menuContainerRef}
               style={{
                 position: 'fixed',
                 top: menuPos.y,
@@ -266,16 +250,16 @@ export default function Member() {
             </div>,
             document.body,
           )}
-        <Modal
+        <RoleModal
           setShow={(value) =>
             setModalState((prev) => ({ ...prev, role: value }))
           }
-          type="role"
           open={modalState.role}
           selected={selected}
+          setValue={setSelected}
         />
-        <Modal
-          type="status"
+        <StatusModal
+          setValue={setSelected}
           setShow={(value) =>
             setModalState((prev) => ({ ...prev, status: value }))
           }
