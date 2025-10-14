@@ -14,6 +14,7 @@ import { useCallback, useState } from 'react';
 import { acceptSignup } from '../../api/acceptSignup';
 import { cancelTrade } from '../../api/cancelTrade';
 import { toast } from 'sonner';
+import { refuseNotifications } from '@/widgets/main/api/refuseNotification';
 
 export type NotificationProps =
   | { type: 'REPORT'; data: Reports; refetch: () => void }
@@ -116,8 +117,8 @@ export default function NotificationCard({
             ✓ 승인
           </Button>
           <Button
-            onClick={() => handleSignupClick(data.id.toString())}
-            className={cn('bg-main-500')}
+            onClick={() => refuseNotifications(data.id.toString())}
+            className={cn('bg-error-500 text-white')}
           >
             거절
           </Button>
