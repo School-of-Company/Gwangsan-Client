@@ -34,10 +34,10 @@ export default function NotificationCard({
     async (id: string) => {
       const res = await acceptSignup(id);
       if (res.status === 204) {
-        toast.success('회원가입 승인 성공했습니다');
         setTimeout(refetch, 1000);
+        toast.success('회원가입 승인 성공했습니다');
       } else {
-        toast.error('회원가입 승인 실패했습니다');
+        toast.error(res.data.message ?? '회원가입 승인 실패했습니다');
       }
     },
     [refetch],
@@ -48,6 +48,9 @@ export default function NotificationCard({
       const res = await cancelTrade(id);
       if (res.status === 200) {
         setTimeout(refetch, 1000);
+        toast.success('거래철회 승인 성공했습니다');
+      } else {
+        toast.error(res.data.message ?? '거래철회 승인에 실패했습니다');
       }
     },
     [refetch],
@@ -129,7 +132,7 @@ export default function NotificationCard({
             </span>
           </div>
           <Button
-            onClick={() => handleSignupClick(data.id.toString())}
+            onClick={() => handleTradeCancelClick(data.id.toString())}
             className={cn('bg-error-500')}
           >
             거래철회
