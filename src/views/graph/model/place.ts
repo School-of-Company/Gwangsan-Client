@@ -1,6 +1,6 @@
 export const PLACES: Record<number, string> = {
-  1: '수완세영',
-  2: '수완에너지',
+  1: '수완마을',
+  2: '고실마을',
   3: '신가',
   4: '신창',
   5: '도산',
