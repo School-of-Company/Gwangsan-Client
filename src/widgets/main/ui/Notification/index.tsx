@@ -40,6 +40,14 @@ export default function Notification() {
                 type="SIGN_UP"
               />
             ))}
+            {data?.tradeCancel.map((v) => (
+              <NotificationCard
+                refetch={refetch}
+                key={v.id}
+                data={v}
+                type="TRADE_CANCEL"
+              />
+            ))}
           </>
         )}
       </div>
