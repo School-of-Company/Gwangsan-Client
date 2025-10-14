@@ -13,7 +13,11 @@ export default function Notification() {
 
   const entire = useMemo(() => {
     if (!data) return [];
-    return [...(data.reports ?? []), ...(data.signUps ?? [])];
+    return [
+      ...(data.reports ?? []),
+      ...(data.signUps ?? []),
+      ...(data.tradeCancel ?? []),
+    ];
   }, [data]);
 
   return (
