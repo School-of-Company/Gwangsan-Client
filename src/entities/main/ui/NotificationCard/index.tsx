@@ -12,6 +12,8 @@ import {
 import { ReportModal } from '@/widgets/main';
 import { useCallback, useState } from 'react';
 import { acceptSignup } from '../../api/acceptSignup';
+import { cancelTrade } from '../../api/cancelTrade';
+import { toast } from 'sonner';
 
 export type NotificationProps =
   | { type: 'REPORT'; data: Reports; refetch: () => void }
@@ -28,15 +30,29 @@ export default function NotificationCard({
     setShow(true);
   }, []);
 
-  const handleClick = useCallback(
+  const handleSignupClick = useCallback(
     async (id: string) => {
       const res = await acceptSignup(id);
       if (res.status === 204) {
+        toast.success('회원가입 승인 성공했습니다');
+        setTimeout(refetch, 1000);
+      } else {
+        toast.error('회원가입 승인 실패했습니다');
+      }
+    },
+    [refetch],
+  );
+
+  const handleTradeCancelClick = useCallback(
+    async (id: string) => {
+      const res = await cancelTrade(id);
+      if (res.status === 200) {
         setTimeout(refetch, 1000);
       }
     },
     [refetch],
   );
+
   switch (type) {
     case 'REPORT':
       return (
@@ -91,7 +107,7 @@ export default function NotificationCard({
             </span>
           </div>
           <Button
-            onClick={() => handleClick(data.id.toString())}
+            onClick={() => handleSignupClick(data.id.toString())}
             className={cn('bg-main-500')}
           >
             ✓ 승인
@@ -113,7 +129,7 @@ export default function NotificationCard({
             </span>
           </div>
           <Button
-            onClick={() => handleClick(data.id.toString())}
+            onClick={() => handleSignupClick(data.id.toString())}
             className={cn('bg-error-500')}
           >
             거래철회
