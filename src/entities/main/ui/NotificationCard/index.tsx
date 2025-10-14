@@ -111,9 +111,15 @@ export default function NotificationCard({
           </div>
           <Button
             onClick={() => handleSignupClick(data.id.toString())}
-            className={cn('bg-main-500')}
+            className={cn('bg-main-500 text-white')}
           >
             ✓ 승인
+          </Button>
+          <Button
+            onClick={() => handleSignupClick(data.id.toString())}
+            className={cn('bg-main-500')}
+          >
+            거절
           </Button>
         </div>
       );
