@@ -7,6 +7,7 @@ import {
   REPORT_TYPE_KOR,
   Reports,
   SignUp,
+  TradeCancel,
 } from '@/widgets/main/model/alertType';
 import { ReportModal } from '@/widgets/main';
 import { useCallback, useState } from 'react';
@@ -14,6 +15,7 @@ import { acceptSignup } from '../../api/acceptSignup';
 
 export type NotificationProps =
   | { type: 'REPORT'; data: Reports; refetch: () => void }
+  | { type: 'TRADE_CANCEL'; data: TradeCancel; refetch: () => void }
   | { type: 'SIGN_UP'; data: SignUp; refetch: () => void };
 
 export default function NotificationCard({
@@ -93,6 +95,28 @@ export default function NotificationCard({
             className={cn('bg-main-500')}
           >
             ✓ 승인
+          </Button>
+        </div>
+      );
+    case 'TRADE_CANCEL':
+      return (
+        <div className={cn('flex w-full justify-between px-3 py-6')}>
+          <div>
+            <div className={cn('flex gap-6')}>
+              <Badge variant="outline" className={cn('px-4')}>
+                거래철회
+              </Badge>
+              <strong className={cn('text-titleSmall')}>{data.nickname}</strong>
+            </div>
+            <span className={cn('mt-[14px] text-body2 text-gray-600')}>
+              {data.title}
+            </span>
+          </div>
+          <Button
+            onClick={() => handleClick(data.id.toString())}
+            className={cn('bg-error-500')}
+          >
+            거래철회
           </Button>
         </div>
       );
