@@ -64,6 +64,7 @@ export default function DetailView() {
           <div className="flex justify-between">
             <div className={cn('flex gap-[42px] text-body2 text-gray-600')}>
               <small>{handleRoleName(data?.role as MemberRole)}</small>
+              <small>{data?.place}</small>
               <small>{handleDate(data?.createdAt)}</small>
             </div>
             <div className="flex gap-3">
