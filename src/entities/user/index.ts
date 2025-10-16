@@ -1,4 +1,5 @@
 export * from './api/auth';
+export * from './api/passwordReset';
 
 export * from './model/types';
 
