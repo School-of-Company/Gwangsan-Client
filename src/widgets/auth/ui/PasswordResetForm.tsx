@@ -47,7 +47,7 @@ export const PasswordResetForm = () => {
           type="tel"
           value={formData.phoneNumber}
           onChange={handleChange}
-          className={errors.phoneNumber ? 'border-red-500' : ''}
+          className={errors.phoneNumber ?? 'border-red-500'}
           disabled={isLoading}
         />
         <div className="mt-1 h-4">
@@ -104,7 +104,7 @@ export const PasswordResetForm = () => {
           onChange={handleChange}
           placeholder="인증번호 6자리"
           maxLength={6}
-          className={errors.code ? 'border-red-500' : ''}
+          className={errors.code ?? 'border-red-500'}
           disabled={isLoading}
         />
         <div className="mt-1 h-4">
@@ -160,7 +160,7 @@ export const PasswordResetForm = () => {
           value={formData.newPassword}
           onChange={handleChange}
           placeholder="영문, 숫자 포함 8자 이상"
-          className={errors.newPassword ? 'border-red-500' : ''}
+          className={errors.newPassword ?? 'border-red-500'}
           disabled={isLoading}
         />
         <div className="mt-1 h-4">
@@ -184,7 +184,7 @@ export const PasswordResetForm = () => {
           value={formData.confirmPassword}
           onChange={handleChange}
           placeholder="비밀번호를 다시 입력하세요"
-          className={errors.confirmPassword ? 'border-red-500' : ''}
+          className={errors.confirmPassword ?? 'border-red-500'}
           disabled={isLoading}
         />
         <div className="mt-1 h-4">
