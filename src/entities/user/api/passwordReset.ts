@@ -37,4 +37,3 @@ export const resetPassword = async (
   );
   return response.data;
 };
-
