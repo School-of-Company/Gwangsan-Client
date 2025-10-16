@@ -18,7 +18,6 @@ export const PasswordResetForm = () => {
     handleSendCode,
     handleVerifyCode,
     handleResetPassword,
-    goBack,
   } = usePasswordReset();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,15 +114,6 @@ export const PasswordResetForm = () => {
 
       <div className="flex gap-2">
         <Button
-          type="button"
-          variant="outline"
-          onClick={goBack}
-          disabled={isLoading}
-          className="flex-1"
-        >
-          이전
-        </Button>
-        <Button
           type="submit"
           variant="outline"
           className="flex-1"
@@ -169,7 +159,7 @@ export const PasswordResetForm = () => {
           type="password"
           value={formData.newPassword}
           onChange={handleChange}
-          placeholder="영문, 숫자, 특수문자 포함 8자 이상"
+          placeholder="영문, 숫자 포함 8자 이상"
           className={errors.newPassword ? 'border-red-500' : ''}
           disabled={isLoading}
         />
@@ -205,15 +195,6 @@ export const PasswordResetForm = () => {
       </div>
 
       <div className="flex gap-2">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={goBack}
-          disabled={isLoading}
-          className="flex-1"
-        >
-          이전
-        </Button>
         <Button
           type="submit"
           variant="outline"
@@ -267,4 +248,3 @@ export const PasswordResetForm = () => {
     </Card>
   );
 };
-
