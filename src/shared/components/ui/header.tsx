@@ -21,6 +21,10 @@ export default function Header() {
     R.push('/graph');
   }, [R]);
 
+  const handleGwangsanClick = useCallback(() => {
+    R.push('/gwangsan');
+  }, [R]);
+
   if (pathname === '/signin' || pathname.includes('/detail')) return;
   return (
     <header className="mt-[78px] flex items-center justify-between">
@@ -39,6 +43,9 @@ export default function Header() {
         </Button>
         <Button onClick={handleGraphClick} variant="outline">
           통계
+        </Button>
+        <Button onClick={handleGwangsanClick} variant="outline">
+          광산관리
         </Button>
       </div>
     </header>
