@@ -131,12 +131,7 @@ export function RoleModal({
   );
 }
 
-export function StatusModal({
-  open,
-  setShow,
-  selected,
-  setValue,
-}: BaseDialogProps) {
+export function StatusModal({ open, setShow, selected }: BaseDialogProps) {
   const { mutate: changeStatus } = useChangeStatus();
   const rawValue = selected.status;
   const selectValue = memberStatusOptions.some((o) => o.value === rawValue)
