@@ -7,12 +7,19 @@ export function middleware(request: NextRequest) {
   const currentPath = request.nextUrl.pathname;
   const role = request.cookies.get('role')?.value;
 
-  if (authConfig.protectedPages.includes(currentPath)) {
-    if (role === 'ROLE_HEAD_ADMIN' || role === 'ROLE_PLACE_ADMIN') {
-    } else {
-      request.cookies.delete('accessToken');
-      request.cookies.delete('refreshToken');
-      return NextResponse.redirect(new URL('/signin', request.url));
+  const isAuthPage = authConfig.publicPages.some(
+    (path: string) => path !== '/' && currentPath.startsWith(path),
+  );
+
+  const isProtectedPage =
+    authConfig.protectedPages.some((path: string) =>
+      currentPath.startsWith(path),
+    ) && !isAuthPage;
+
+  if (isProtectedPage) {
+    const isAdmin = role === 'ROLE_HEAD_ADMIN' || role === 'ROLE_PLACE_ADMIN';
+    if (!isAdmin) {
+      return NextResponse.redirect(new URL(authConfig.signInPage, request.url));
     }
   }
 
@@ -25,9 +32,7 @@ export function middleware(request: NextRequest) {
     }
 
     return NextResponse.next({
-      request: {
-        headers: requestHeaders,
-      },
+      request: { headers: requestHeaders },
     });
   }
 
@@ -42,20 +47,10 @@ export function middleware(request: NextRequest) {
   const hasAccessToken = request.cookies.has('accessToken');
   const hasRefreshToken = request.cookies.has('refreshToken');
 
-  const isProtectedPage = authConfig.protectedPages.some((path: string) =>
-    currentPath.startsWith(path),
-  );
-
-  const isAuthPage = authConfig.publicPages.some(
-    (path: string) => path !== '/' && currentPath.startsWith(path),
-  );
-
   if (!hasAccessToken && isProtectedPage) {
     if (hasRefreshToken) {
       return NextResponse.next({
-        request: {
-          headers: requestHeaders,
-        },
+        request: { headers: requestHeaders },
       });
     } else {
       return NextResponse.redirect(new URL(authConfig.signInPage, request.url));
@@ -67,9 +62,7 @@ export function middleware(request: NextRequest) {
   }
 
   return NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
+    request: { headers: requestHeaders },
   });
 }
 
