@@ -29,7 +29,7 @@ export default function GwangsanView() {
   const [modal, setModal] = useState(false);
   const [isAdd, setIsAdd] = useState(true);
 
-  const { data } = useGetMembers();
+  const { data, refetch } = useGetMembers();
 
   const handleAdd = useCallback(() => {
     setIsAdd(true);
@@ -105,6 +105,7 @@ export default function GwangsanView() {
                       open={modal}
                       setShow={setModal}
                       isAdd={isAdd}
+                      refetch={refetch}
                     />
                   </TableCell>
                 </TableRow>
