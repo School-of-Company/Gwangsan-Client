@@ -51,7 +51,7 @@ instance.interceptors.request.use(
     return config;
   },
   (error: AxiosError) => {
-    console.error('[ㅌAuth] Request interceptor error:', error);
+    console.error('[Auth] Request interceptor error:', error);
     return Promise.reject(error);
   },
 );
@@ -116,12 +116,12 @@ instance.interceptors.response.use(
 
       const response = await refreshInstance.patch<{ accessToken: string }>(
         'auth/reissue',
-        {}, 
+        {},
         {
           headers: {
             RefreshToken: refreshToken,
           },
-        }
+        },
       );
 
       const { accessToken } = response.data;
@@ -142,7 +142,7 @@ instance.interceptors.response.use(
       );
 
       if (isProtectedPage) {
-        window.location.href = authConfig.signInPage;
+        window.location.replace(authConfig.signInPage);
       }
 
       return Promise.reject(refreshError);
