@@ -24,4 +24,5 @@ export interface MemberType {
   role: MemberRole;
   status: MEMBER_STATUS;
   joinedAt: string;
+  gwangsan: number;
 }
