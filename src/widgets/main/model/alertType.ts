@@ -46,3 +46,28 @@ export interface Report {
   reportId: number;
   images: ImageType[];
 }
+
+export interface TradeCancel {
+  id: number;
+  nickname: string;
+  title: string;
+  reason: string;
+  placeName: Place;
+  createdAt: string;
+  images: ImageType[];
+  product: {
+    id: number;
+    title: string;
+    content: string;
+    gwangsan: number;
+    type: 'OBJECT' | 'SERVICE';
+    mode: 'GIVER' | 'RECEIVER';
+    member: {
+      memberId: number;
+      nickname: string;
+      placeName: Place;
+      light: number;
+    };
+    images: ImageType;
+  };
+}
