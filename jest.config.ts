@@ -15,7 +15,7 @@ const customJestConfig: Config = {
   testPathIgnorePatterns: ['/node_modules/', '/.next/'],
 
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/$1',
+    '^@/(.*)$': '<rootDir>/src/$1',
   },
 
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
