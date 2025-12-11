@@ -106,6 +106,7 @@ export default function Member() {
           <SearchIcon />
         </span>
         <Input
+          placeholder="닉네임을 입력하세요"
           className="mb-6 focus:outline-none focus:ring-0 focus-visible:ring-0"
           value={filter.nickname}
           onChange={(e) =>
