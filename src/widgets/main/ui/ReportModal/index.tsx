@@ -111,7 +111,7 @@ export default function ReportModal({
             </SelectTrigger>
             <SelectContent className="bg-white">
               {memberStatusOptions
-                .filter((option) => option.label !== '활동')
+                .filter((option) => option.value !== 'ACTIVE')
                 .map((option) => (
                   <SelectItem value={option.value} key={option.value}>
                     {option.label}
