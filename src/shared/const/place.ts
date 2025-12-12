@@ -33,3 +33,5 @@ export const placeOptions = Object.entries(PLACES).map(([value, label]) => ({
   value,
   label,
 }));
+
+export type PlaceValueType = (typeof PLACES)[keyof typeof PLACES];

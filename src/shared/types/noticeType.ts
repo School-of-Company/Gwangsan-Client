@@ -1,6 +1,6 @@
-import { PLACES } from '@/views/graph/model/place';
 import { MemberRole } from '../const/role';
 import { ImageType } from './imageType';
+import { PlaceValueType } from '../const/place';
 
 export interface Notices {
   id: number;
@@ -10,7 +10,7 @@ export interface Notices {
 }
 
 export interface DetailNotice extends Notices {
-  place: (typeof PLACES)[keyof typeof PLACES];
+  place: PlaceValueType;
   createdAt: string;
   role: MemberRole;
   isMe: boolean;
