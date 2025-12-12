@@ -15,6 +15,19 @@ export const PLACES = [
 
 export type Place = (typeof PLACES)[number];
 
+export const PLACE_RECORD: Record<number, string> = Object.fromEntries(
+  PLACES.map((label, index) => [index + 1, label]),
+) as Record<number, string>;
+
+export type PlaceRecordType = keyof typeof PLACE_RECORD;
+
+export const placeOptions = Object.entries(PLACE_RECORD).map(
+  ([value, label]) => ({
+    value,
+    label,
+  }),
+);
+
 export type HeadType = keyof typeof HEAD;
 
 export const HEAD: Record<number, string> = {
