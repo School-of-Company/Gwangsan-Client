@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from '@/shared/components/ui/select';
 import { Textarea } from '@/shared/components/ui/textarea';
-import { PLACES } from '@/shared/const/place';
+import { placeOptions } from '@/shared/const/place';
 import { cn } from '@/shared/lib/utils';
 import { handlePostNotice } from '../../lib/handlePostNotice';
 import { useState, useRef } from 'react';
@@ -88,13 +88,13 @@ export default function WriteNotice() {
             </SelectTrigger>
             <SelectContent className={cn('w-full bg-white')}>
               <SelectGroup id="placeName">
-                {PLACES.map((v) => (
+                {placeOptions.map((v) => (
                   <SelectItem
                     className={cn('w-full bg-white')}
-                    value={v}
-                    key={v}
+                    value={v.value}
+                    key={v.value}
                   >
-                    {v}
+                    {v.label}
                   </SelectItem>
                 ))}
               </SelectGroup>

@@ -28,7 +28,7 @@ import {
   SelectGroup,
   SelectItem,
 } from '@/shared/components/ui/select';
-import { PLACES } from '@/shared/const/place';
+import { placeOptions } from '@/shared/const/place';
 import { Input } from '@/shared/components/ui/input';
 import { storage } from '@/shared/lib/storage';
 import { RoleModal, StatusModal } from '@/widgets/main/ui/Modal';
@@ -131,13 +131,13 @@ export default function Member() {
             </SelectTrigger>
             <SelectContent className={cn('w-full bg-white outline-none')}>
               <SelectGroup id="placeName">
-                {PLACES.map((v) => (
+                {placeOptions.map((v) => (
                   <SelectItem
                     className={cn('w-full bg-white')}
-                    value={v}
-                    key={v}
+                    value={v.value}
+                    key={v.value}
                   >
-                    {v}
+                    {v.label}
                   </SelectItem>
                 ))}
               </SelectGroup>
