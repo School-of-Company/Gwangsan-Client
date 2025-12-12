@@ -90,7 +90,7 @@ export default function ReportModal({
 
           <div>
             <div className="flex gap-2 overflow-x-auto">
-              {images.map((v) => (
+              {images?.map((v) => (
                 <Image
                   src={v.imageUrl}
                   alt={v.imageUrl}
@@ -110,11 +110,13 @@ export default function ReportModal({
               <SelectValue placeholder="상태 선택" />
             </SelectTrigger>
             <SelectContent className="bg-white">
-              {memberStatusOptions.map((option) => (
-                <SelectItem value={option.value} key={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
+              {memberStatusOptions
+                .filter((option) => option.label !== '활동')
+                .map((option) => (
+                  <SelectItem value={option.value} key={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
             </SelectContent>
           </Select>
 
