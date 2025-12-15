@@ -34,4 +34,11 @@ export const placeOptions = Object.entries(PLACES).map(([value, label]) => ({
   label,
 }));
 
-export type PlaceValueType = (typeof PLACES)[keyof typeof PLACES];
+type PlaceName = (typeof PLACES)[keyof typeof PLACES];
+
+export const PLACE_VALUES = Object.values(PLACES) as unknown as readonly [
+  PlaceName,
+  ...PlaceName[],
+];
+
+export type PlaceValueType = (typeof PLACE_VALUES)[number];
