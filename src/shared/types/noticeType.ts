@@ -1,6 +1,6 @@
-import { Place } from '../const/place';
 import { MemberRole } from '../const/role';
 import { ImageType } from './imageType';
+import { PlaceValueType } from '../const/place';
 
 export interface Notices {
   id: number;
@@ -10,7 +10,7 @@ export interface Notices {
 }
 
 export interface DetailNotice extends Notices {
-  place: Place;
+  place: PlaceValueType;
   createdAt: string;
   role: MemberRole;
   isMe: boolean;

@@ -19,7 +19,7 @@ import { MemberRole, memberRoleOptions } from '@/shared/const/role';
 import { MEMBER_STATUS, memberStatusOptions } from '@/shared/types/memberType';
 import { useChangeStatus } from '@/shared/model/useChangeStatus';
 import { useChangeRole } from '@/widgets/main/model/useChangeRole';
-import { allPlaceOptions } from '@/shared/const/place';
+import { headOptions, placeOptions } from '@/shared/const/place';
 import { Dispatch, SetStateAction } from 'react';
 import { Button } from '@/shared/components/ui/button';
 
@@ -56,6 +56,9 @@ export function RoleModal({
     ? rawValue
     : undefined;
 
+  const isHeadAdmin = selected.role === 'ROLE_HEAD_ADMIN';
+  const isPlaceAdmin = selected.role === 'ROLE_PLACE_ADMIN';
+
   return (
     <Dialog open={open} onOpenChange={setShow}>
       <DialogContent className="z-50 rounded-xl bg-white sm:max-w-[400px]">
@@ -85,10 +88,11 @@ export function RoleModal({
           </Select>
         </div>
 
-        {(selected.role === 'ROLE_PLACE_ADMIN' ||
-          selected.role === 'ROLE_HEAD_ADMIN') && (
+        {(isPlaceAdmin || isHeadAdmin) && (
           <div className="space-y-2">
-            <Label htmlFor="place-modal-select">지점 또는 본점</Label>
+            <Label htmlFor="place-modal-select">
+              {isHeadAdmin ? '본점' : '지점'}
+            </Label>
             <Select
               value={selected.place ? String(selected.place) : undefined}
               onValueChange={(e) => {
@@ -96,10 +100,14 @@ export function RoleModal({
               }}
             >
               <SelectTrigger id="place-modal-select">
-                <SelectValue placeholder="지점 또는 본점을 선택하세요" />
+                <SelectValue
+                  placeholder={
+                    isHeadAdmin ? '본점을 선택하세요' : '지점을 선택하세요'
+                  }
+                />
               </SelectTrigger>
               <SelectContent className="bg-white">
-                {allPlaceOptions.map((r) => (
+                {(isHeadAdmin ? headOptions : placeOptions).map((r) => (
                   <SelectItem key={r.value} value={r.value}>
                     {r.label}
                   </SelectItem>
