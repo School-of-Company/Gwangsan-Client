@@ -28,7 +28,7 @@ export default function Notification() {
           <div className="py-8 text-center text-gray-400">알림이 없습니다.</div>
         ) : (
           <>
-            {data?.reports.map((v) => (
+            {data?.reports?.map((v) => (
               <NotificationCard
                 refetch={refetch}
                 key={v.id}
@@ -36,7 +36,7 @@ export default function Notification() {
                 type="REPORT"
               />
             ))}
-            {data?.signUps.map((v) => (
+            {data?.signUps?.map((v) => (
               <NotificationCard
                 refetch={refetch}
                 key={v.memberId}
@@ -44,7 +44,7 @@ export default function Notification() {
                 type="SIGN_UP"
               />
             ))}
-            {data?.tradeCancel.map((v) => (
+            {data?.tradeCancel?.map((v) => (
               <NotificationCard
                 refetch={refetch}
                 key={v.id}
