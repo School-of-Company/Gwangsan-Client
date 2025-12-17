@@ -2,7 +2,6 @@ import { NoticeSchema } from '../model/noticeSchema';
 import { postNotice } from '../api/postNotice';
 import { toast } from 'sonner';
 import { editNotice } from '../api/editNotice';
-import { PlaceValueType } from '@/shared/const/place';
 
 export const handlePostNotice = async (
   formData: FormData,
@@ -15,7 +14,7 @@ export const handlePostNotice = async (
   const value = {
     title: formData.get('title') as string,
     content: formData.get('content') as string,
-    placeName: formData.get('placeName') as PlaceValueType,
+    placeId: Number(formData.get('placeName')),
     imageIds,
   };
 
