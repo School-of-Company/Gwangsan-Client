@@ -40,5 +40,8 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Install ts-node for Jest TS config
+        run: npm install --no-save ts-node
+
       - name: Test
         run: npm test
