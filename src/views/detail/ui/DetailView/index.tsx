@@ -23,6 +23,7 @@ import {
 } from '@/shared/components/ui/alert-dialog';
 import { Button } from '@/shared/components/ui/button';
 import { deletePost } from '@/entities/notice/api/deletePost';
+import BackHeader from '@/shared/ui/BackHeader';
 
 export default function DetailView() {
   const { id } = useParams();
@@ -53,13 +54,7 @@ export default function DetailView() {
     <div className={cn('flex flex-col items-center')}>
       <div className={cn('flex w-full max-w-[1000px] flex-col gap-6')}>
         <div>
-          <div
-            onClick={handleClick}
-            className={cn('mb-[51px] mt-[69px] flex gap-6')}
-          >
-            <ArrowLeft />
-            <span className={cn('text-body1')}>뒤로가기</span>
-          </div>
+          <BackHeader />
           <h1 className={cn('mb-4 text-titleLarge')}>{data?.title}</h1>
           <div className="flex justify-between">
             <div className={cn('flex gap-[42px] text-body2 text-gray-600')}>
