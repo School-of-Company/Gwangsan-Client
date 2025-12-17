@@ -34,10 +34,13 @@ import { storage } from '@/shared/lib/storage';
 import { RoleModal, StatusModal } from '@/widgets/main/ui/Modal';
 
 export default function Member() {
-  const [filter, setFilter] = useState({ nickname: '', placeName: '' });
+  const [filter, setFilter] = useState<{
+    nickname: string;
+    placeId?: number;
+  }>({ nickname: '', placeId: undefined });
   const { data, isError, error } = useGetMembers(
     filter.nickname,
-    filter.placeName,
+    filter.placeId,
   );
   const [modalState, setModalState] = useState({
     role: false,
@@ -88,7 +91,7 @@ export default function Member() {
   }, []);
 
   const initValue = useCallback(() => {
-    setFilter({ nickname: '', placeName: '' });
+    setFilter({ nickname: '', placeId: undefined });
   }, []);
   return (
     <div className="mb-[24px] mt-[96px] h-full min-h-28 w-full overflow-scroll">
@@ -120,17 +123,17 @@ export default function Member() {
             대상 지점
           </label>
           <Select
-            name="placeName"
-            value={filter.placeName}
+            name="placeId"
+            value={filter.placeId ? String(filter.placeId) : undefined}
             onValueChange={(value) =>
-              setFilter((prev) => ({ ...prev, placeName: value }))
+              setFilter((prev) => ({ ...prev, placeId: Number(value) }))
             }
           >
             <SelectTrigger className="focus:outline-none focus:ring-0 focus-visible:ring-0">
               <SelectValue placeholder="대상 지점을 선택해주세요" />
             </SelectTrigger>
             <SelectContent className={cn('w-full bg-white outline-none')}>
-              <SelectGroup id="placeName">
+              <SelectGroup id="placeId">
                 {placeOptions.map((v) => (
                   <SelectItem
                     className={cn('w-full bg-white')}
@@ -152,7 +155,6 @@ export default function Member() {
               <TableHead>회원</TableHead>
               <TableHead>역할</TableHead>
               <TableHead>상태</TableHead>
-              <TableHead>가입일</TableHead>
               <TableHead />
             </TableRow>
           </TableHeader>
@@ -182,7 +184,6 @@ export default function Member() {
                       {MEMBER_STATUS_KOR[member.status]}
                     </Badge>
                   </TableCell>
-                  <TableCell>{handleDate(member.joinedAt)}</TableCell>
                   <TableCell className="text-right">
                     <div className="inline-block">
                       <span

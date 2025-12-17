@@ -2,7 +2,7 @@ import { instance } from '@/shared/lib/axios';
 
 export const getHeadGraph = async (
   period: string | undefined,
-  head: string,
+  head: number,
 ) => {
   try {
     const res = await instance.get(

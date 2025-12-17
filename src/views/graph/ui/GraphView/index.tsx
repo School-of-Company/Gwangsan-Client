@@ -23,8 +23,8 @@ export default function GraphView() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const chartRef = useRef<Chart | null>(null);
   const [period, setPeriod] = useState<string>('DAY');
-  const [head, setHead] = useState<string>('1');
-  const [place, setPlace] = useState<string | undefined>(undefined);
+  const [head, setHead] = useState<number>(1);
+  const [place, setPlace] = useState<number | undefined>(undefined);
   const { data: headData } = useGetHeadGraph(period, head);
   const { data: placeData } = useGetPlacegraph(period, place);
 
@@ -38,7 +38,7 @@ export default function GraphView() {
     if (!ctx) return;
 
     const labels = placeData
-      ? [placeOptions.find((p) => p.value === place)?.label ?? '선택 지점']
+      ? [placeOptions.find((p) => Number(p.value) === place)?.label ?? '선택 지점']
       : (headData?.map((d) => d.place.name) ?? []);
 
     const values = placeData
@@ -122,7 +122,7 @@ export default function GraphView() {
             ))}
           </SelectContent>
         </Select>
-        <Select value={head} onValueChange={(e) => setHead(e)}>
+        <Select value={String(head)} onValueChange={(e) => setHead(Number(e))}>
           <SelectTrigger>
             <SelectValue placeholder="본점을 선택하세요" />
           </SelectTrigger>
@@ -134,7 +134,7 @@ export default function GraphView() {
             ))}
           </SelectContent>
         </Select>
-        <Select value={place} onValueChange={(e) => setPlace(e)}>
+        <Select value={String(place)} onValueChange={(e) => setPlace(Number(e))}>
           <SelectTrigger>
             <SelectValue placeholder="지점을 선택하세요" />
           </SelectTrigger>
