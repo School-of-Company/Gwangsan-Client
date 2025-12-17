@@ -2,7 +2,7 @@ import { instance } from '@/shared/lib/axios';
 
 export const getPlaceGraph = async (
   period: string | undefined,
-  place: string,
+  place: number,
 ) => {
   try {
     const res = await instance.get(

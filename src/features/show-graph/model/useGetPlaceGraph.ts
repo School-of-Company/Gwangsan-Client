@@ -7,7 +7,7 @@ interface Response {
 
 export const useGetPlacegraph = (
   period: string | undefined,
-  place: string | undefined,
+  place: number | undefined,
 ) => {
   return useQuery<Response>({
     queryKey: ['graph', place, period],
