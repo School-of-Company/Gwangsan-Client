@@ -1,4 +1,3 @@
-import { PLACE_VALUES } from '@/shared/const/place';
 import z from 'zod';
 
 export const NoticeSchema = z.object({
@@ -10,8 +9,8 @@ export const NoticeSchema = z.object({
     .string()
     .min(1, '내용을 입력해주세요.')
     .max(1000, '최대 1000자까지만 입력 가능합니다.'),
-  placeName: z.enum(PLACE_VALUES).nullable(),
-  imageIds: z.array(z.number().int().positive()),
+  placeId: z.number().int().positive(),
+  imageIds: z.array(z.number().int().positive()).nullable(),
 });
 
 export type Notice = z.infer<typeof NoticeSchema>;

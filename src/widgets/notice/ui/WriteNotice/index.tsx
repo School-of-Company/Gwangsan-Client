@@ -82,12 +82,15 @@ export default function WriteNotice() {
           <label className={cn('mb-1 block text-sm font-medium')}>
             대상 지점
           </label>
-          <Select defaultValue={data?.place} name="placeName">
+          <Select
+            defaultValue={data?.place ? String(data.place) : undefined}
+            name="placeId"
+          >
             <SelectTrigger>
               <SelectValue placeholder="대상 지점을 선택해주세요" />
             </SelectTrigger>
             <SelectContent className={cn('w-full bg-white')}>
-              <SelectGroup id="placeName">
+              <SelectGroup id="placeId">
                 {placeOptions.map((v) => (
                   <SelectItem
                     className={cn('w-full bg-white')}

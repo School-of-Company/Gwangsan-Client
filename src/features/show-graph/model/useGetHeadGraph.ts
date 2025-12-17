@@ -9,7 +9,7 @@ interface Response {
   tradeCount: number;
 }
 
-export const useGetHeadGraph = (period: string | undefined, head: string) => {
+export const useGetHeadGraph = (period: string | undefined, head: number) => {
   return useQuery<Response[]>({
     queryKey: ['graph', head, period],
     queryFn: () => getHeadGraph(period, head),

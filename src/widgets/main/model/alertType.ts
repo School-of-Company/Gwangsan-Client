@@ -1,4 +1,3 @@
-import { PlaceValueType } from '@/shared/const/place';
 import { ImageType } from '@/shared/types/imageType';
 
 export type REPORT_TYPE = 'FRAUD' | 'BAD_LANGUAGE' | 'MEMBER' | 'ETC';
@@ -24,7 +23,7 @@ export interface SignUp {
   memberId: number;
   nickname: string;
   title: string;
-  placeName: PlaceValueType;
+  placeId: number;
   recommenderNickname: string;
   created_at: string;
 }
@@ -35,7 +34,7 @@ export interface Reports {
   reportedMemberId: number;
   reportedMemberName: string;
   title: string;
-  placeName: PlaceValueType;
+  placeId: number;
   createdAt: string;
   report: Report;
 }
@@ -52,7 +51,7 @@ export interface TradeCancel {
   nickname: string;
   title: string;
   reason: string;
-  placeName: PlaceValueType;
+  placeId: number;
   createdAt: string;
   images: ImageType[];
   product: {
@@ -65,7 +64,7 @@ export interface TradeCancel {
     member: {
       memberId: number;
       nickname: string;
-      placeName: PlaceValueType;
+      placeId: number;
       light: number;
     };
     images: ImageType;

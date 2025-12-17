@@ -4,12 +4,12 @@ import { instance } from '@/shared/lib/axios';
 export const changeRole = async (
   id: string,
   role: MemberRole,
-  place: number,
+  placeId: number,
 ) => {
   try {
     const res = await instance.patch('/admin/role/' + id, {
       role,
-      place,
+      placeId,
     });
     return res.data;
   } catch (error) {

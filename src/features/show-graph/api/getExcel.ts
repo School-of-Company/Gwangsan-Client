@@ -1,6 +1,6 @@
 import { instance } from '@/shared/lib/axios';
 
-export const getExcel = async (period: string | undefined, head_id: string) => {
+export const getExcel = async (period: string | undefined, head_id: number) => {
   try {
     const res = await instance.get(
       `/trade/excel?period=${period}&head_id=${head_id}`,
