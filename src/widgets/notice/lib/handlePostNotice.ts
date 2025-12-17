@@ -14,7 +14,7 @@ export const handlePostNotice = async (
   const value = {
     title: formData.get('title') as string,
     content: formData.get('content') as string,
-    placeId: Number(formData.get('placeName')),
+    placeId: Number(formData.get('placeId')),
     imageIds,
   };
 
