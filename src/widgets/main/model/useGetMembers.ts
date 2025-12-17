@@ -4,10 +4,10 @@ import { MemberType } from '@/shared/types/memberType';
 
 export const useGetMembers = (
   nickname?: string | undefined,
-  placeName?: string | undefined,
+  placeId?: number | undefined,
 ) => {
   return useQuery<MemberType[]>({
-    queryKey: ['members', nickname, placeName],
-    queryFn: () => getMembers(nickname, placeName),
+    queryKey: ['members', nickname, placeId],
+    queryFn: () => getMembers(nickname, placeId),
   });
 };
