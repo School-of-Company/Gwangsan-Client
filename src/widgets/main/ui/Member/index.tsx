@@ -155,7 +155,6 @@ export default function Member() {
               <TableHead>회원</TableHead>
               <TableHead>역할</TableHead>
               <TableHead>상태</TableHead>
-              <TableHead>가입일</TableHead>
               <TableHead />
             </TableRow>
           </TableHeader>
@@ -185,7 +184,6 @@ export default function Member() {
                       {MEMBER_STATUS_KOR[member.status]}
                     </Badge>
                   </TableCell>
-                  <TableCell>{handleDate(member.joinedAt)}</TableCell>
                   <TableCell className="text-right">
                     <div className="inline-block">
                       <span
