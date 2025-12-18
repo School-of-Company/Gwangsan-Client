@@ -4,7 +4,7 @@ import { PlaceValueType } from '@/shared/const/place';
 import { MEMBER_STATUS } from '@/shared/types/memberType';
 import { MemberRole } from '@/shared/const/role';
 
-interface Member {
+export interface Member {
   memberId: number;
   nickname: string;
   placeName: PlaceValueType;
