@@ -48,18 +48,18 @@ export default function Information({
           </p>
         </div>
       </div>
-        <div className='flex gap-4'>
-          {onEditStatus && (
-            <Button variant="outline" onClick={onEditStatus}>
-              상태 수정
-            </Button>
-          )}
-          {onEditRole && (
-            <Button variant="outline" onClick={onEditRole}>
-              역할 수정
-            </Button>
-          )}
-        </div>
+      <div className='flex gap-4'>
+        {onEditStatus && (
+          <Button variant="outline" onClick={onEditStatus}>
+            상태 수정
+          </Button>
+        )}
+        {onEditRole && (
+          <Button variant="outline" onClick={onEditRole}>
+            역할 수정
+          </Button>
+        )}
+      </div>
     </section>
   );
 }
