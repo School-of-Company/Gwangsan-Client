@@ -29,6 +29,7 @@ import {
 import { placeOptions } from '@/shared/const/place';
 import { Input } from '@/shared/components/ui/input';
 import { storage } from '@/shared/lib/storage';
+import { useRouter } from 'next/navigation';
 
 export default function Member() {
   const [filter, setFilter] = useState<{
@@ -40,11 +41,16 @@ export default function Member() {
     filter.placeId,
   );
   const [role, setRole] = useState<string | null>(null);
+  const R = useRouter();
 
   useEffect(() => {
     const storedRole = storage.getItem('role');
     setRole(storedRole);
   }, []);
+
+    const handleRowClick = useCallback((id: string) => {
+    R.push(`/profile/${id}`);
+  }, [R]);
 
   if (isError)
     toast.error(error.message ?? '회원 목록을 가져오는데 실패했습니다');
@@ -120,7 +126,7 @@ export default function Member() {
           <TableBody>
             {data &&
               data.map((member, idx) => (
-                <TableRow key={idx}>
+                <TableRow key={idx} onClick={() => handleRowClick(member.memberId)}>
                   <TableCell className={cn('whitespace-nowrap')}>
                     <div className={cn('flex flex-col')}>
                       <span>
