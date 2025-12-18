@@ -15,7 +15,7 @@ export const useChangeRole = () => {
     }: {
       id: string;
       role: MemberRole;
-      place: number;
+      place?: number;
     }) => changeRole(id, role, place),
     onMutate: async ({ id, role, place }) => {
       await queryClient.cancelQueries({ queryKey: ['members'] });
