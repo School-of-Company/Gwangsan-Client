@@ -15,7 +15,7 @@ export default function BackHeader() {
   return (
     <header
       onClick={handleClick}
-      className={cn('mb-[51px] mt-[69px] flex gap-6')}
+      className={cn('mb-[51px] mt-[69px] w-full flex gap-6')}
     >
       <ArrowLeft />
       <span className={cn('text-body1')}>뒤로가기</span>
