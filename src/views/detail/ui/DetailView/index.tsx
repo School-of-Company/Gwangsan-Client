@@ -5,7 +5,7 @@ import { useGetDetailNotice } from '../../model/useGetDetailNotice';
 import { cn } from '@/shared/lib/utils';
 import { handleRoleName } from '../../lib/handleRoleName';
 import { MemberRole } from '@/shared/const/role';
-import { ArrowLeft, Edit, Trash2 } from 'lucide-react';
+import { Edit, Trash2 } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import { ImageSlider } from '@/entities/detail';
 import { handleDate } from '@/shared/lib/handleDate';
@@ -32,10 +32,6 @@ export default function DetailView() {
   const [open, setOpen] = useState(false);
 
   if (isError) toast.error(error.message ?? '게시물을 가져오는데 실패했습니다');
-
-  const handleClick = useCallback(() => {
-    R.back();
-  }, [R]);
 
   const handleModalOpen = useCallback(() => {
     setOpen(true);
