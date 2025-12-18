@@ -23,5 +23,6 @@ export const useGetMember = (memberId: string) => {
   return useQuery<Member>({
     queryKey: ['member', memberId],
     queryFn: () => getMember(memberId),
+    enabled: !!memberId,
   });
 };
