@@ -21,7 +21,7 @@ export default function ProfileView() {
     <div className='flex flex-col justify-center items-center'>
         <BackHeader />
         <div className='max-w-[600px] w-full'>
-        <h1 className="text-titleLarge mb-[62px]">프로필</h1>
+        <h1 className='text-titleLarge mb-[62px]'>프로필</h1>
         <Information
           data={data}
           onEditRole={() => setRoleModalOpen(true)}
