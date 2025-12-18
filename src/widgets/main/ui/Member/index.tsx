@@ -48,7 +48,7 @@ export default function Member() {
     setRole(storedRole);
   }, []);
 
-    const handleRowClick = useCallback((id: string) => {
+  const handleRowClick = useCallback((id: string) => {
     R.push(`/profile/${id}`);
   }, [R]);
 
