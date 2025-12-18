@@ -126,7 +126,10 @@ export default function Member() {
           <TableBody>
             {data &&
               data.map((member, idx) => (
-                <TableRow key={idx} onClick={() => handleRowClick(member.memberId)}>
+                <TableRow
+                  key={member.memberId}
+                  onClick={() => handleRowClick(member.memberId)}
+                >
                   <TableCell className={cn('whitespace-nowrap')}>
                     <div className={cn('flex flex-col')}>
                       <span>
