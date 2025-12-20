@@ -3,7 +3,6 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useGetDetailNotice } from '../../model/useGetDetailNotice';
 import { cn } from '@/shared/lib/utils';
-import { handleRoleName } from '../../lib/handleRoleName';
 import { MemberRole } from '@/shared/const/role';
 import { Edit, Trash2 } from 'lucide-react';
 import { useCallback, useState } from 'react';
@@ -24,6 +23,7 @@ import {
 import { Button } from '@/shared/components/ui/button';
 import { deletePost } from '@/entities/notice/api/deletePost';
 import BackHeader from '@/shared/ui/BackHeader';
+import { handleRoleName } from '@/shared/lib/handleRoleName';
 
 export default function DetailView() {
   const { id } = useParams();

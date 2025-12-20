@@ -13,7 +13,7 @@ import {
 import { Badge } from '@/shared/components/ui/badge';
 import { useGetMembers } from '../../model/useGetMembers';
 import { MEMBER_STATUS_KOR } from '@/shared/types/memberType';
-import { handleRoleName } from '@/views/detail/lib/handleRoleName';
+import { handleRoleName } from '@/shared/lib/handleRoleName';
 import { Button } from '@/shared/components/ui/button';
 import { useCallback, useState, useEffect } from 'react';
 import { toast } from 'sonner';
@@ -48,9 +48,12 @@ export default function Member() {
     setRole(storedRole);
   }, []);
 
-    const handleRowClick = useCallback((id: string) => {
-    R.push(`/profile/${id}`);
-  }, [R]);
+  const handleRowClick = useCallback(
+    (id: string) => {
+      R.push(`/profile/${id}`);
+    },
+    [R],
+  );
 
   if (isError)
     toast.error(error.message ?? '회원 목록을 가져오는데 실패했습니다');
@@ -126,7 +129,10 @@ export default function Member() {
           <TableBody>
             {data &&
               data.map((member, idx) => (
-                <TableRow key={idx} onClick={() => handleRowClick(member.memberId)}>
+                <TableRow
+                  key={idx}
+                  onClick={() => handleRowClick(member.memberId)}
+                >
                   <TableCell className={cn('whitespace-nowrap')}>
                     <div className={cn('flex flex-col')}>
                       <span>
