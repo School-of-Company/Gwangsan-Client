@@ -25,7 +25,7 @@ export default function Header() {
     R.push('/gwangsan');
   }, [R]);
 
-  if (pathname === '/signin' || pathname.includes('/detail')) return;
+  if (pathname === '/signin' || pathname.includes('/detail') || pathname.includes('/profile')) return;
   return (
     <header className="mt-[78px] flex items-center justify-between">
       <Image

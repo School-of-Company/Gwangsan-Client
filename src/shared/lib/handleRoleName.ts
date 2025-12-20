@@ -1,6 +1,6 @@
 import { MemberRole } from '@/shared/const/role';
 
-export const handleRoleName = (name: MemberRole) => {
+export const handleRoleName = (name?: MemberRole) => {
   switch (name) {
     case 'ROLE_HEAD_ADMIN':
       return '본점 관리자';

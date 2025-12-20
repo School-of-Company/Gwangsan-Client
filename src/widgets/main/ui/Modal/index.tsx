@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import {
   Dialog,
   DialogContent,
@@ -20,44 +22,23 @@ import { MEMBER_STATUS, memberStatusOptions } from '@/shared/types/memberType';
 import { useChangeStatus } from '@/shared/model/useChangeStatus';
 import { useChangeRole } from '@/widgets/main/model/useChangeRole';
 import { headOptions, placeOptions } from '@/shared/const/place';
-import { Dispatch, SetStateAction } from 'react';
 import { Button } from '@/shared/components/ui/button';
+import { Member } from '@/widgets/profile/model/useGetMember';
 
 interface BaseDialogProps {
   open: boolean;
   setShow: (v: boolean) => void;
-  setValue: Dispatch<
-    SetStateAction<{
-      name: string;
-      id: string;
-      status: string;
-      role: string;
-      place: number;
-    }>
-  >;
-  selected: {
-    name: string;
-    id: string;
-    status: string;
-    role: string;
-    place: number;
-  };
+  selected: Member;
 }
 
-export function RoleModal({
-  open,
-  setShow,
-  selected,
-  setValue,
-}: BaseDialogProps) {
+export function RoleModal({ open, setShow, selected }: BaseDialogProps) {
   const { mutate: changeRole } = useChangeRole();
-  const rawValue = selected.role;
-  const selectValue = memberRoleOptions.some((o) => o.value === rawValue)
-    ? rawValue
-    : undefined;
 
-  const isHeadAdmin = selected.role === 'ROLE_HEAD_ADMIN';
-  const isPlaceAdmin = selected.role === 'ROLE_PLACE_ADMIN';
+  const [roleValue, setRoleValue] = useState<string | undefined>();
+  const [placeValue, setPlaceValue] = useState<string | undefined>();
+
+  const isHeadAdmin = roleValue === 'ROLE_HEAD_ADMIN';
+  const isPlaceAdmin = roleValue === 'ROLE_PLACE_ADMIN';
 
   return (
     <Dialog open={open} onOpenChange={setShow}>
@@ -69,12 +50,7 @@ export function RoleModal({
 
         <div className="space-y-2">
           <Label htmlFor="role-modal-select">역할</Label>
-          <Select
-            value={selectValue}
-            onValueChange={(e) => {
-              setValue((prev) => ({ ...prev, role: e }));
-            }}
-          >
+          <Select value={roleValue} onValueChange={(v) => setRoleValue(v)}>
             <SelectTrigger id="role-modal-select">
               <SelectValue placeholder="역할을 선택하세요" />
             </SelectTrigger>
@@ -93,12 +69,7 @@ export function RoleModal({
             <Label htmlFor="place-modal-select">
               {isHeadAdmin ? '본점' : '지점'}
             </Label>
-            <Select
-              value={selected.place ? String(selected.place) : undefined}
-              onValueChange={(e) => {
-                setValue((prev) => ({ ...prev, place: Number(e) }));
-              }}
-            >
+            <Select value={placeValue} onValueChange={(v) => setPlaceValue(v)}>
               <SelectTrigger id="place-modal-select">
                 <SelectValue
                   placeholder={
@@ -121,14 +92,20 @@ export function RoleModal({
           <Button onClick={() => setShow(false)}>취소</Button>
           <Button
             onClick={() => {
-              if (selectValue) {
-                changeRole({
-                  id: selected.id,
-                  role: selectValue as MemberRole,
-                  place: Number(selected.place),
-                });
-                setShow(false);
-              }
+              if (!roleValue) return;
+
+              const needsPlace =
+                roleValue === 'ROLE_PLACE_ADMIN' ||
+                roleValue === 'ROLE_HEAD_ADMIN';
+              if (needsPlace && placeValue == null) return;
+
+              changeRole({
+                id: String(selected.memberId),
+                role: roleValue as MemberRole,
+                ...(needsPlace ? { place: Number(placeValue) } : {}),
+              });
+
+              setShow(false);
             }}
           >
             확인
@@ -159,7 +136,10 @@ export function StatusModal({ open, setShow, selected }: BaseDialogProps) {
           <Select
             value={selectValue}
             onValueChange={(e) => {
-              changeStatus({ id: selected.id, status: e as MEMBER_STATUS });
+              changeStatus({
+                id: String(selected.memberId),
+                status: e as MEMBER_STATUS,
+              });
               setShow(false);
             }}
           >
