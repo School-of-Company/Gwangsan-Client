@@ -106,17 +106,9 @@ instance.interceptors.response.use(
         throw new Error('No refresh token available');
       }
 
-      const refreshInstance = axios.create({
-        baseURL,
-        timeout: 10000,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const response = await refreshInstance.patch<{ accessToken: string }>(
-        'auth/reissue',
-        {},
+      const response = await instance.patch<{ accessToken: string }>(
+        baseURL + 'auth/reissue',
+        null,
         {
           headers: {
             RefreshToken: refreshToken,
