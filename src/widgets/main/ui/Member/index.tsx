@@ -13,13 +13,11 @@ import {
 import { Badge } from '@/shared/components/ui/badge';
 import { useGetMembers } from '../../model/useGetMembers';
 import { MEMBER_STATUS_KOR } from '@/shared/types/memberType';
-import { handleDate } from '@/shared/lib/handleDate';
-import { handleRoleName } from '@/views/detail/lib/handleRoleName';
+import { handleRoleName } from '@/shared/lib/handleRoleName';
 import { Button } from '@/shared/components/ui/button';
 import { useCallback, useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
 import { toast } from 'sonner';
-import { MoreHorizontal, SearchIcon } from 'lucide-react';
+import { SearchIcon } from 'lucide-react';
 import {
   SelectTrigger,
   SelectValue,
@@ -31,7 +29,7 @@ import {
 import { placeOptions } from '@/shared/const/place';
 import { Input } from '@/shared/components/ui/input';
 import { storage } from '@/shared/lib/storage';
-import { RoleModal, StatusModal } from '@/widgets/main/ui/Modal';
+import { useRouter } from 'next/navigation';
 
 export default function Member() {
   const [filter, setFilter] = useState<{
@@ -42,53 +40,23 @@ export default function Member() {
     filter.nickname,
     filter.placeId,
   );
-  const [modalState, setModalState] = useState({
-    role: false,
-    status: false,
-  });
-  const [selected, setSelected] = useState<{
-    name: string;
-    id: string;
-    status: string;
-    role: string;
-    place: number;
-  }>({
-    name: '',
-    id: '',
-    status: '',
-    role: '',
-    place: 0,
-  });
-  const [selectedMoreId, setSelectedMoreId] = useState<string | null>(null);
-  const [menuPos, setMenuPos] = useState<{ x: number; y: number } | null>(null);
   const [role, setRole] = useState<string | null>(null);
+  const R = useRouter();
 
   useEffect(() => {
     const storedRole = storage.getItem('role');
     setRole(storedRole);
   }, []);
 
+  const handleRowClick = useCallback(
+    (id: string) => {
+      R.push(`/profile/${id}`);
+    },
+    [R],
+  );
+
   if (isError)
     toast.error(error.message ?? '회원 목록을 가져오는데 실패했습니다');
-
-  const openMenuAt = useCallback((id: string, el: HTMLElement | null) => {
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const top = rect.bottom + 8;
-    const left = rect.right - 128;
-    setSelectedMoreId(id);
-    setMenuPos({ x: Math.max(8, left), y: Math.max(8, top) });
-  }, []);
-
-  const openRoleModal = useCallback(() => {
-    setModalState((prev) => ({ ...prev, role: true }));
-    setSelectedMoreId(null);
-  }, []);
-
-  const openStatusModal = useCallback(() => {
-    setModalState((prev) => ({ ...prev, status: true }));
-    setSelectedMoreId(null);
-  }, []);
 
   const initValue = useCallback(() => {
     setFilter({ nickname: '', placeId: undefined });
@@ -161,7 +129,10 @@ export default function Member() {
           <TableBody>
             {data &&
               data.map((member, idx) => (
-                <TableRow key={idx}>
+                <TableRow
+                  key={idx}
+                  onClick={() => handleRowClick(member.memberId)}
+                >
                   <TableCell className={cn('whitespace-nowrap')}>
                     <div className={cn('flex flex-col')}>
                       <span>
@@ -184,90 +155,10 @@ export default function Member() {
                       {MEMBER_STATUS_KOR[member.status]}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-right">
-                    <div className="inline-block">
-                      <span
-                        onClick={(e) => {
-                          setSelected({
-                            name: member.name,
-                            id: member.memberId,
-                            status: member.status,
-                            role: member.role,
-                            place: selected.place,
-                          });
-                          openMenuAt(
-                            member.memberId,
-                            e.currentTarget as HTMLElement,
-                          );
-                        }}
-                        className="inline-flex"
-                      >
-                        <MoreHorizontal className="text-muted-foreground h-4 w-4 cursor-pointer" />
-                      </span>
-                    </div>
-                  </TableCell>
                 </TableRow>
               ))}
           </TableBody>
         </Table>
-        {selectedMoreId &&
-          menuPos &&
-          createPortal(
-            <div
-              style={{
-                position: 'fixed',
-                top: menuPos.y,
-                left: menuPos.x,
-                zIndex: 9999,
-                width: 128,
-              }}
-              className="rounded-md border bg-white shadow-md"
-            >
-              <ul className="w-32">
-                <li>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start"
-                    onClick={() => {
-                      openStatusModal();
-                      setSelectedMoreId(null);
-                    }}
-                  >
-                    상태 변경
-                  </Button>
-                </li>
-                <li>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start"
-                    onClick={() => {
-                      openRoleModal();
-                      setSelectedMoreId(null);
-                    }}
-                  >
-                    역할 변경
-                  </Button>
-                </li>
-              </ul>
-            </div>,
-            document.body,
-          )}
-        <RoleModal
-          setShow={(value) =>
-            setModalState((prev) => ({ ...prev, role: value }))
-          }
-          open={modalState.role}
-          selected={selected}
-          setValue={setSelected}
-        />
-        <StatusModal
-          setValue={setSelected}
-          setShow={(value) =>
-            setModalState((prev) => ({ ...prev, status: value }))
-          }
-          selected={selected}
-          open={modalState.status}
-        />
       </div>
       <GoNotice />
     </div>
