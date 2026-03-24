@@ -20,7 +20,7 @@ export const reportTypeOptions = Object.entries(REPORT_TYPE_KOR).map(
 export type ALERT_TYPE = 'REPORT' | 'SIGN_UP';
 
 export interface SignUp {
-  id: number;
+  id: string;
   memberId: number;
   nickname: string;
   title: string;
@@ -30,7 +30,7 @@ export interface SignUp {
 }
 
 export interface Reports {
-  id: number;
+  id: string;
   nickname: string;
   reportedMemberId: number;
   reportedMemberName: string;
@@ -48,7 +48,7 @@ export interface Report {
 }
 
 export interface TradeCancel {
-  id: number;
+  id: string;
   nickname: string;
   title: string;
   reason: string;

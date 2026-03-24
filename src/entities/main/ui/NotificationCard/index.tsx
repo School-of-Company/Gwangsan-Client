@@ -32,8 +32,8 @@ export default function NotificationCard({
   }, []);
 
   const handleSignupClick = useCallback(
-    async (id: number) => {
-      const res = await acceptSignup(String(id));
+    async (id: string) => {
+      const res = await acceptSignup(id);
       if (res.status === 204) {
         setTimeout(refetch, 1000);
         toast.success('회원가입 승인 성공했습니다');
@@ -91,7 +91,7 @@ export default function NotificationCard({
             reportedMemberName={data.reportedMemberName}
             content={data.report.content}
             memberId={data.reportedMemberId}
-            notificationId={String(data.id)}
+            notificationId={data.id}
             refetch={refetch}
           />
         </div>
@@ -120,7 +120,7 @@ export default function NotificationCard({
               승인
             </Button>
             <Button
-              onClick={() => refuseNotifications(String(data.id))}
+              onClick={() => refuseNotifications(data.id)}
               className={cn('bg-error-500 text-white')}
             >
               거절
@@ -143,7 +143,7 @@ export default function NotificationCard({
             </span>
           </div>
           <Button
-            onClick={() => handleTradeCancelClick(data.id.toString())}
+            onClick={() => handleTradeCancelClick(data.id)}
             className={cn('bg-error-500')}
           >
             거래철회
