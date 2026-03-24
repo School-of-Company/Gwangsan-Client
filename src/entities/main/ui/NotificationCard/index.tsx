@@ -32,8 +32,8 @@ export default function NotificationCard({
   }, []);
 
   const handleSignupClick = useCallback(
-    async (id: string) => {
-      const res = await acceptSignup(id);
+    async (id: number) => {
+      const res = await acceptSignup(String(id));
       if (res.status === 204) {
         setTimeout(refetch, 1000);
         toast.success('회원가입 승인 성공했습니다');
@@ -120,7 +120,7 @@ export default function NotificationCard({
               승인
             </Button>
             <Button
-              onClick={() => refuseNotifications(data.id)}
+              onClick={() => refuseNotifications(String(data.id))}
               className={cn('bg-error-500 text-white')}
             >
               거절
