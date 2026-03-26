@@ -98,8 +98,10 @@ export default function NotificationCard({
       );
     case 'SIGN_UP':
       return (
-        <div className={cn('flex w-full justify-between px-3 py-6')}>
-          <div>
+        <div
+          className={cn('flex w-full items-center justify-between px-3 py-6')}
+        >
+          <div className="flex flex-col gap-0.5">
             <div className={cn('flex gap-6')}>
               <Badge variant="outline" className={cn('px-4')}>
                 회원가입
@@ -110,18 +112,20 @@ export default function NotificationCard({
               회원가입 요청
             </span>
           </div>
-          <Button
-            onClick={() => handleSignupClick(data.id.toString())}
-            className={cn('bg-main-500 text-white')}
-          >
-            ✓ 승인
-          </Button>
-          <Button
-            onClick={() => refuseNotifications(data.id.toString())}
-            className={cn('bg-error-500 text-white')}
-          >
-            거절
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={() => handleSignupClick(data.id)}
+              className={cn('bg-main-500 text-white')}
+            >
+              승인
+            </Button>
+            <Button
+              onClick={() => refuseNotifications(data.id)}
+              className={cn('bg-error-500 text-white')}
+            >
+              거절
+            </Button>
+          </div>
         </div>
       );
     case 'TRADE_CANCEL':
@@ -139,7 +143,7 @@ export default function NotificationCard({
             </span>
           </div>
           <Button
-            onClick={() => handleTradeCancelClick(data.id.toString())}
+            onClick={() => handleTradeCancelClick(String(data.id))}
             className={cn('bg-error-500')}
           >
             거래철회
