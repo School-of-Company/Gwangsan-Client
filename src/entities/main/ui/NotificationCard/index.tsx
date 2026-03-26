@@ -143,7 +143,7 @@ export default function NotificationCard({
             </span>
           </div>
           <Button
-            onClick={() => handleTradeCancelClick(data.id.toString())}
+            onClick={() => handleTradeCancelClick(String(data.id))}
             className={cn('bg-error-500')}
           >
             거래철회
