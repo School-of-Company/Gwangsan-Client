@@ -91,7 +91,7 @@ export default function NotificationCard({
             reportedMemberName={data.reportedMemberName}
             content={data.report.content}
             memberId={data.reportedMemberId}
-            notificationId={data.id}
+            notificationId={String(data.id)}
             refetch={refetch}
           />
         </div>
@@ -143,7 +143,7 @@ export default function NotificationCard({
             </span>
           </div>
           <Button
-            onClick={() => handleTradeCancelClick(data.id)}
+            onClick={() => handleTradeCancelClick(String(data.id))}
             className={cn('bg-error-500')}
           >
             거래철회

@@ -30,7 +30,7 @@ export interface SignUp {
 }
 
 export interface Reports {
-  id: string;
+  id: number;
   nickname: string;
   reportedMemberId: number;
   reportedMemberName: string;
@@ -48,7 +48,7 @@ export interface Report {
 }
 
 export interface TradeCancel {
-  id: string;
+  id: number;
   nickname: string;
   title: string;
   reason: string;
