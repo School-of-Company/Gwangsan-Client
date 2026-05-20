@@ -12,6 +12,7 @@ import { deleteAccount } from '@/shared/api/deleteAccount';
 export default function Header() {
   const R = useRouter();
   const pathname = usePathname();
+  const [isSignoutConfirmOpen, setIsSignoutConfirmOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const handleClick = useCallback(() => {
@@ -25,6 +26,11 @@ export default function Header() {
   const handleGwangsanClick = useCallback(() => {
     R.push('/gwangsan');
   }, [R]);
+
+  const handleSignout = useCallback(() => {
+    signout();
+    setIsSignoutConfirmOpen(false);
+  }, []);
 
   const handleWithdrawal = useCallback(async () => {
     await deleteAccount();
@@ -42,7 +48,7 @@ export default function Header() {
           onClick={handleClick}
         />
         <div className="flex items-center gap-2">
-          <Button onClick={signout} variant="outline">
+          <Button onClick={() => setIsSignoutConfirmOpen(true)} variant="outline">
             로그아웃
           </Button>
           <Button onClick={() => setIsConfirmOpen(true)} variant="outline">
@@ -56,6 +62,20 @@ export default function Header() {
           </Button>
         </div>
       </header>
+      {isSignoutConfirmOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="flex w-80 flex-col gap-4 rounded-lg bg-white p-6 shadow-lg">
+            <p className="text-base font-semibold">로그아웃</p>
+            <p className="text-sm text-gray-500">정말로 로그아웃 하시겠습니까?</p>
+            <div className="flex justify-end gap-2">
+              <Button onClick={() => setIsSignoutConfirmOpen(false)} variant="outline">
+                취소
+              </Button>
+              <Button onClick={handleSignout}>로그아웃</Button>
+            </div>
+          </div>
+        </div>
+      )}
       {isConfirmOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="flex w-80 flex-col gap-4 rounded-lg bg-white p-6 shadow-lg">
