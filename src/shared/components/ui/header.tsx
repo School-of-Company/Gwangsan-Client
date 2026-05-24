@@ -35,6 +35,7 @@ export default function Header() {
   const handleWithdrawal = useCallback(async () => {
     await deleteAccount();
     setIsConfirmOpen(false);
+    window.location.href = '/signin';
   }, []);
 
   if (pathname === '/signin' || pathname.includes('/detail') || pathname.includes('/profile')) return;
